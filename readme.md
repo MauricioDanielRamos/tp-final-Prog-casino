@@ -20,6 +20,6 @@ Fecha limite de entrega: 6 de Diciembre 2024
 Modo de entrega: el trabajo debe ser subido a un
 Repositorio nuevo en github (un repositorio por Equipo pero todos deben trabajar).
 
-##EXTRA
+## EXTRA
 • Leer las instrucciones de cada juego mediante un 
 archivo txt.
