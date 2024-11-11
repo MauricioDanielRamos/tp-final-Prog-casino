@@ -21,5 +21,4 @@ Modo de entrega: el trabajo debe ser subido a un
 Repositorio nuevo en github (un repositorio por Equipo pero todos deben trabajar).
 
 ## EXTRA
-• Leer las instrucciones de cada juego mediante un 
-archivo txt.
+• Leer las instrucciones de cada juego mediante un archivo txt.
