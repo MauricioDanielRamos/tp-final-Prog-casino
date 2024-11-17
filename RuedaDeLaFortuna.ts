@@ -32,7 +32,7 @@ private jugar(): void {
     while (deseaContinuar) {
         //Aqui va la apuesta
     const deseaJugar = rls
-        .question("¿Quieres girar la rueda? (s/n): ")
+        .question("Quieres girar la rueda? (s/n): ")
         .toLowerCase();
     if (deseaJugar === "s") {
             console.log("\n Girando la rueda... ");
@@ -43,11 +43,14 @@ private jugar(): void {
             } else {
             console.log(`¡Felicitaciones! Ganaste ${resultado} creditos.`);
             };
-            const jugarNuevamente = rls.question("¿Quieres jugar otra vez? (s/n): ").toLowerCase();
+            const jugarNuevamente = rls.question("Quieres jugar otra vez? (s/n): ").toLowerCase();
             deseaContinuar = jugarNuevamente === "s";
+            } else if (deseaJugar === "n") {
+                console.log(`¡Gracias por jugar!`);
+                break;
             } else {
-            deseaContinuar = false;
-        }
+                console.error(`Por favor, escribe una opción válida.`);
+            }
     }
     console.log("Gracias por jugar. ¡Hasta la próxima!");
 }
