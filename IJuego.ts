@@ -1,6 +1,6 @@
-import { SesionCasino } from "./Casino";
+import { Sesion } from "./Sesion";
 
-export interface IJuego{
-    getNombre(): string;
-    jugar(sesion: SesionCasino): void;
+export interface IJuego {
+	getNombre(): string;
+	jugar(sesion: Sesion): void;
 }
