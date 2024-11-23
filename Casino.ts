@@ -1,26 +1,28 @@
 import { Juego } from "./Juego";
-import { Sesion } from "./Sesion";
+import { Sesiones } from "./Sesiones";
+import { Usuario } from "./Usuario";
 
 import * as rls from "readline-sync";
 
 //Implementación de la clase SesionCasino
 export class Casino {
-	private juegos: Juego[]; // Lista de juegos disponibles en el casino
-	private sesion: Sesion; // Objeto para gestionar sesiones de usuario
 	private nombre: string; // nombre del casino
-
+    private juegos: Juego[]; // Lista de juegos disponibles en el casino
+    private sesiones: Sesiones;
+	//private sesion: Sesion; // Objeto para gestionar sesiones de usuario
+	
 	// Constructor de la clase SesionCasino
 	constructor(nombre: string, juegos: Juego[]) {
 		// Valida que el nombre del casino sea válido
 		if (nombre == undefined || nombre.length < 1) {
 			throw new Error("Nombre no válido.");
 		}
-		this.nombre = nombre;
-		this.juegos = juegos;
-		this.sesion = new Sesion();
+        this.nombre = nombre;        
+		this.juegos = juegos;        //Falta validar acá
+        this.sesiones = new Sesiones();
 	}
 
-	// Retorna el nombre de la sesión
+	// Retorna el nombre del Casino
 	public getNombre(): string {
 		return this.nombre;
 	}
@@ -51,12 +53,11 @@ export class Casino {
 		const menuPrincipal: string[] = [
 			// Opciones del menú principal
 			"CONFIGURACION DE USUARIO",
-			"CARGA O RETIRO DE CREDITO",
 			"JUEGOS DISPONIBLES",
 			"SALIR",
 		];
 		let opcion: number = -1;
-		while (opcion !== 3) {
+		while (opcion !== 2) {
 			// Repite hasta que se seleccione la opción de salir
 			try {
 				console.clear();
@@ -69,15 +70,8 @@ export class Casino {
 				switch (
 					opcion // Ejecuta acciones basadas en la opción seleccionada
 				) {
-					case 0:
-						// Configuración de usuarios
-						this.configurarNombreUsuario();
-						break;
+					case 0: this.menuUsuarios(); break;
 					case 1:
-						// Carga o retiro de Créditos
-						this.solicitarMonto();
-						break;
-					case 2:
 						// Muestra la lista de Juegos Disponibles en el casino para jugar
 						this.menuJuegos();
 						break;
@@ -94,11 +88,12 @@ export class Casino {
 		}
 	}
 
+    
 	// Funcion para solicitar el nombre de usuario
-	private configurarNombreUsuario(): void {
+	private menuUsuarios(): void {
 		let opcion: number = -1;
 
-		while (opcion !== 2) {
+		while (opcion !== 3) {
 			// Repite hasta que la opción sea "VOLVER" (indice 2)
 			console.clear();
 			console.log("╔═══════════════════════════════════════╗");
@@ -106,12 +101,12 @@ export class Casino {
 			console.log("╚═══════════════════════════════════════╝");
 
 			// Mostrar lista de usuarios registrados
-			const usuarios = this.sesion.getUsuarios(); // Obtiene la lista de usuarios actuales
+			const usuarios = this.sesiones.getUsuarios(); // Obtiene la lista de usuarios actuales
 			if (usuarios.length > 0) {
 				// Verifica si hay usuarios configurados
 				console.log("Usuarios configurados:");
-				usuarios.forEach(({ id, nombre }) => {
-					console.log(`  ID: ${id} - Nombre: ${nombre}`);
+				usuarios.forEach((usuario) => {
+					console.log(`  ID: ${usuario.getId()} - Nombre: ${usuario.getNombre()}`);
 				}); // Lista los usuarios con su ID y su nombre
 			} else {
 				console.log("No hay usuarios configurados."); // Mensaje si no hay usuarios
@@ -121,6 +116,7 @@ export class Casino {
 			const opciones = [
 				"AGREGAR UN USUARIO",
 				"ELIMINAR UN USUARIO",
+                "CARGAR/RETIRAR CRÉDITO",
 				"VOLVER",
 			];
 			opcion = rls.keyInSelect(opciones, "Seleccione una opción: ", {
@@ -129,70 +125,35 @@ export class Casino {
 			});
 
 			switch (opcion) {
-				case 0: // Agregar un nuevo usuario
-					try {
-						// Solicita el nombre para un nuevo usuario
-						const nuevoNombre = rls.question(
-							"Ingrese el nombre del nuevo usuario: "
-						);
-
-						// Agrega al usuario usando el método de la clase Sesión
-						this.sesion.agregarUsuario(nuevoNombre);
-						console.log(
-							`¡Usuario "${nuevoNombre}" agregado con éxito!`
-						); // Mensaje de confirmación si se agrego correctamente
-					} catch (error) {
-						// Maneja errores de validación
-						console.error(`${(error as Error).message}`);
-						rls.keyInPause(
-							"Presione cualquier tecla para continuar...",
-							{ guide: false, cancel: false }
-						);
-					}
-					break;
-
-				case 1: // Eliminar un usuario
-					// Verifica que haya usuarios para eliminar
-					if (usuarios.length > 0) {
-						try {
-							// Solicita el ID del usuario
-							const idEliminar = rls.questionInt(
-								"Ingrese el ID del usuario a eliminar: "
-							);
-
-							// Elimina al usuario con el ID especificado
-							this.sesion.eliminarUsuarioPorId(idEliminar);
-							console.log(
-								`¡Usuario con ID ${idEliminar} eliminado con éxito!` //Mensaje de confirmación
-							);
-							rls.keyInPause(
-								"Presione cualquier tecla para continuar...",
-								{ guide: false }
-							);
-						} catch (error) {
-							// Maneja errores en la eliminación
-							console.error(`${(error as Error).message}`);
-							rls.keyInPause(
-								"Presione cualquier tecla para continuar...",
-								{ guide: false }
-							);
-						}
-					} else {
-						// Mensaje si no hay usuarios para eliminar
-						console.log("No hay usuarios para eliminar.");
-						rls.keyInPause(
-							"Presione cualquier tecla para continuar...",
-							{ guide: false }
-						);
-					}
-					break;
-
-				case 2: // Volver al menú principal
-					break;
+				case 0: this.agregarUsuario(); break;
+				case 1: this.eliminarUsuario(); break;
+				case 2: this.solicitarMonto(); break;
 			}
 		}
 	}
+    
+    // Agregar un nuevo usuario
+    private agregarUsuario(): void{    
+        try {
+            // Solicita el nombre para un nuevo usuario
+            const nuevoNombre = rls.question(
+                "Ingrese el nombre del nuevo usuario: "
+            );
 
+            // Agrega al usuario usando el método de la clase Sesión
+            this.sesiones.agregarUsuario(nuevoNombre);
+            // Mensaje de confirmación si se agrego correctamente
+            console.log(`Usuario "${nuevoNombre}" agregado con éxito!`);             
+        } catch (error) {
+            // Maneja errores de validación
+            console.error(`${(error as Error).message}`);
+            rls.keyInPause(
+                "Presione cualquier tecla para continuar...",
+                { guide: false, cancel: false }
+            );
+        }
+    }
+    
 	// Función para solicitar el monto de crédito o retiro
 	private solicitarMonto(): void {
 		console.clear();
@@ -200,7 +161,7 @@ export class Casino {
 		console.log("║       Cargar o Retirar Monto de Dinero      ║");
 		console.log("╚═════════════════════════════════════════════╝");
 
-		const usuarios = this.sesion.getUsuarios(); //Obtener la lista de usuarios desde la sesion
+		const usuarios = this.sesiones.getUsuarios(); //Obtener la lista de usuarios desde la sesion
 		if (usuarios.length === 0) {
 			// Verifica si hay usuarios registrados
 			console.log(
@@ -215,9 +176,9 @@ export class Casino {
 
 		// Mostrar usuarios registrados con su ID , nombre y créditos disponibles
 		console.log("Usuarios registrados:");
-		usuarios.forEach(({ id, nombre, creditos }) => {
+		usuarios.forEach((usuario) => {
 			console.log(
-				`  ID: ${id} - Nombre: ${nombre} - Créditos: $${creditos.toLocaleString(
+				`  ID: ${usuario.getId()} - Nombre: ${usuario.getNombre()} - Créditos: $${usuario.getCreditos().toLocaleString(
 					"es-AR",
 					{
 						minimumFractionDigits: 2,
@@ -236,11 +197,11 @@ export class Casino {
 
 		switch (opcion) {
 			case 0: // Cargar crédito
-				this.cargarCredito(usuarios);
+				this.cargarCredito();
 				break;
 
 			case 1: // Retirar crédito
-				this.retirarCredito(usuarios);
+				this.retirarCredito();
 				break;
 
 			case 2: // Volver al menú anterior
@@ -249,9 +210,7 @@ export class Casino {
 	}
 
 	// Función para retirar crédito de un usuario
-	private retirarCredito(
-		usuarios: { id: number; nombre: string; creditos: number }[]
-	): void {
+	private retirarCredito(): void {
 		try {
 			// Solicita el ID del usuario
 			const idUsuario = rls.questionInt(
@@ -268,17 +227,12 @@ export class Casino {
 			}
 
 			// Busca al usuario con el ID proporcionado
-			const usuario = usuarios.find((u) => u.id === idUsuario);
-			// Verificar si el usuario existe
-			if (!usuario) {
-				throw new Error(
-					`No se encontró un usuario con el ID ${idUsuario}.`
-				);
-			}
+			const usuario = this.sesiones.getUsuario(idUsuario);
 
-			// Realiza el retiro de crédito utilizando el metedo setCreditos
-			this.sesion.setCreditos(idUsuario, -monto); // Reduce el monto en los creditos del usurio
-			console.log(
+            // Realiza el retiro de crédito utilizando el metedo setCreditos
+			usuario?.setCreditos(-monto); // Reduce el monto en los creditos del usurio
+			
+            console.log(
 				`¡Retiro exitoso! Se han retirado $${monto.toLocaleString(
 					"es-AR",
 					{
@@ -303,9 +257,7 @@ export class Casino {
 	}
 
 	// Función para cargar créditos a un usuario
-	private cargarCredito(
-		usuarios: { id: number; nombre: string; creditos: number }[]
-	): void {
+	private cargarCredito(): void {
 		try {
 			// Solicita el ID a el usuario
 			const idUsuario = rls.questionInt(
@@ -321,16 +273,10 @@ export class Casino {
 			}
 
 			// Busca el usuario con el ID proporcionado
-			const usuario = usuarios.find((u) => u.id === idUsuario);
-			// Verificar si el usuario existe
-			if (!usuario) {
-				throw new Error(
-					`No se encontró un usuario con el ID ${idUsuario}.`
-				);
-			}
-
+			const usuario = this.sesiones.getUsuario(idUsuario);
+            
 			// Agrega el monto a los créditos del usuario
-			this.sesion.setCreditos(idUsuario, monto); // Incrementa los créditos del usuario
+			usuario.setCreditos(monto); // Incrementa los créditos del usuario
 			console.log(
 				`¡Carga Exitosa! Se han cargado $${monto.toLocaleString(
 					"es-AR",
@@ -371,16 +317,79 @@ export class Casino {
 		let opcionJuegos: number = -1;
 		//Repite hasta que se elija la útima opción (VOLVER)
 		while (opcionJuegos !== menuJuegos.length - 1) {
-			console.clear();
-			opcionJuegos = rls.keyInSelect(menuJuegos, "Opción: ", {
-				guide: false,
-				cancel: false,
-			});
+            try{
+                console.clear();
+                opcionJuegos = rls.keyInSelect(menuJuegos, "Opción: ", {
+                    guide: false,
+                    cancel: false,
+                });
 
-			// Si no se elige la opción "Volver", inicia el juego seleccionado
-			if (opcionJuegos !== menuJuegos.length - 1) {
-				this.juegos[opcionJuegos].jugar(this.sesion); // Llama al método jugar del juego seleccionado, pasándole la sesión actual
-			}
+                // Si no se elige la opción "Volver", inicia el juego seleccionado
+                if (opcionJuegos !== menuJuegos.length - 1) {
+                    this.juegos[opcionJuegos].jugar(this.obtenerUsuario()); // Llama al método jugar del juego seleccionado, pasándole la sesión actual
+                }
+            } catch (error) {
+                // Maneja errores durante el proceso
+                console.error(`${(error as Error).message}`);
+                rls.keyInPause("Presione cualquier tecla para continuar...", {
+                    guide: false,
+                });
+            }
 		}
 	}
+
+    // Método para obtener el ID del usuario desde la sesión
+	// Este método se adapta en función del número de usuarios disponibles
+	private obtenerUsuario(): Usuario {
+		// Si hay más de un usuariom, muestra los usuarios disponibles
+		console.log("Usuarios disponibles:");
+		this.sesiones.getUsuarios().forEach((u) => {
+			// Muestra cada usuario con su ID y nombre
+			console.log(`ID: ${u.getId()} - Nombre: ${u.getNombre()}`);
+		});
+
+        // Solicita el ID a el usuario
+        const idUsuario = rls.questionInt(
+            "Ingrese el ID del usuario: "
+        );
+		
+		return this.sesiones.getUsuario(idUsuario);		
+	}
+
+    // Eliminar un usuario
+    private eliminarUsuario(): void{
+        // Verifica que haya usuarios para eliminar
+        if (this.sesiones.getUsuarios().length > 0) {
+            try {
+                // Solicita el ID del usuario
+                const idEliminar = rls.questionInt(
+                    "Ingrese el ID del usuario a eliminar: "
+                );
+
+                // Elimina al usuario con el ID especificado
+                this.sesiones.eliminarUsuarioPorId(idEliminar);
+                console.log(
+                    `¡Usuario con ID ${idEliminar} eliminado con éxito!` //Mensaje de confirmación
+                );
+                rls.keyInPause(
+                    "Presione cualquier tecla para continuar...",
+                    { guide: false }
+                );
+            } catch (error) {
+                // Maneja errores en la eliminación
+                console.error(`${(error as Error).message}`);
+                rls.keyInPause(
+                    "Presione cualquier tecla para continuar...",
+                    { guide: false }
+                );
+            }
+        } else {
+            // Mensaje si no hay usuarios para eliminar
+            console.log("No hay usuarios para eliminar.");
+            rls.keyInPause(
+                "Presione cualquier tecla para continuar...",
+                { guide: false }
+            );
+        }
+    }
 }

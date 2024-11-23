@@ -1,4 +1,4 @@
-import { Sesion } from "./Sesion";
+import { Usuario } from "./Usuario";
 
 export abstract class Juego {
 	//nombre del juego
@@ -17,5 +17,5 @@ export abstract class Juego {
 	/* Declara un método abstracto llamado "jugar" que debe ser implementado en las clases hijas.
 	 Este método recibe un parámetro de tipo "Sesion" y no tiene implementación en la clase base.
 	Las clases que hereden de Juego deberán definir cómo se lleva a cabo el juego utilizando este método.*/
-	public abstract jugar(sesion: Sesion): void;
+	public abstract jugar(usuario: Usuario): void;
 }
