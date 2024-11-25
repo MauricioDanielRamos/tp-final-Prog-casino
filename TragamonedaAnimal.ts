@@ -1,12 +1,14 @@
 import { Juego } from "./Juego";
 import { Usuario } from "./Usuario";
+import { ITragamoneda } from "./ITragamoneda";
 import * as rls from "readline-sync";
 
 // Definimos un valor mínimo de créditos para poder jugar
-const CREDITOS_MINIMOS: number = 50;
+const CREDITOS_MINIMOS: number = 100;
 
-export class Tragamoneda extends Juego {
-    private rodillos: string[] = ["🍒", "🍋", "🍊", "🍉", "🍇", "🍓", "🍍", "🥝", "🍌", "🥥"];
+export class TragamonedaAnimal extends Juego implements ITragamoneda {
+    public nombreJuego: string="Tragamoneda Animal";
+    private rodillos: string[] = ["🦁", "🐯", "🐻", "🐼", "🐨", "🐸", "🐵", "🦊", "🐴", "🐶"];
     private apuesta: number = 0;
     private emojiFavorito: string = ``;
     
@@ -29,7 +31,7 @@ export class Tragamoneda extends Juego {
 		}
 
 		// Si todo es válido, muestra un mensaje de bienvenida al usuario
-		console.log(`Bienvenido ${usuario.getNombre()} al juego de Tragamonedas`);
+		console.log(`Bienvenido ${usuario.getNombre()} al juego de ${this.nombreJuego}`);
 
 		// Muestra la cantidad de créditos actuales de la sesión, formateados con 2 decimales
 		console.log(
@@ -67,19 +69,16 @@ export class Tragamoneda extends Juego {
         
         private establecerApuesta(usuario: Usuario): void {
             while (true) {
-                const apuestaIngresada = rls.question(`Ingresa tu apuesta (mínimo 50 créditos): `);
+                const apuestaIngresada = rls.question(`Ingresa tu apuesta (mínimo 100 créditos): `);
                 const apuesta = parseInt(apuestaIngresada);
 
                 if (!isNaN(apuesta) && apuesta >= 50 && apuesta <= usuario.getCreditos()) {
                     this.apuesta = apuesta;
-                    usuario.setCreditos( - apuesta);
-
-                    console.log(usuario.getCreditos());
-                    
+                    usuario.setCreditos(- apuesta);
                     console.log(`Has apostado ${apuesta} créditos.`);
                     break;
                 } else {
-                    console.error(`Por favor, ingresa un valor válido entre 50 y tus créditos disponibles (${usuario.getCreditos()}).`);
+                    console.error(`Por favor, ingresa un valor válido entre 100 y tus créditos disponibles (${usuario.getCreditos()}).`);
                 }
             }
             
@@ -132,20 +131,17 @@ export class Tragamoneda extends Juego {
             let premio: number = 0; // Variable local para el premio en esta jugada
         
             if (coincidencias === 3) {
-                premio = this.apuesta * 10;
+                premio = this.apuesta * 15;
                 console.log(`¡Felicidades! Coincidieron los 3 emojis.`);
             } else if (coincidencias === 2) {
-                premio = this.apuesta * 3;
+                premio = this.apuesta * 6;
                 console.log(`¡Muy bien! Coincidieron 2 emojis.`);
             } else if (coincidencias === 1) {
-                premio = this.apuesta; // Solo recupera su apuesta
+                premio = this.apuesta * 2; // Duplica apuesta
                 console.log(`Coincidió 1 emoji.`);
             } else {
                 console.log(`No hubo coincidencias esta vez.`);
             }
-
-            console.log(usuario.getCreditos());
-            
             usuario.setCreditos( + premio); // Sumamos el premio (si hubo)
             console.log(`Tu premio es: ${premio} créditos.`);
             console.log(
@@ -153,8 +149,6 @@ export class Tragamoneda extends Juego {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
             })}`);
-            
     }
     }
-
     
