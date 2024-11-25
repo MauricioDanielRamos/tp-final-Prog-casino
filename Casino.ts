@@ -1,7 +1,7 @@
 import { Juego } from "./Juego";
 import { Sesiones } from "./Sesiones";
 import { Usuario } from "./Usuario";
-import { readFileSync } from 'node:fs';
+import { Util } from "./Util";
 import * as rls from "readline-sync";
 
 //Implementación de la clase SesionCasino
@@ -29,16 +29,7 @@ export class Casino {
 
 	//Muestra una guía que indica al usuario como jugar en el Casino
 	private mostrarInstrucciones() {
-		try{
-			let filetext = readFileSync(`./${this.constructor.name}.ins`,'utf8');
-			if (filetext.length>0){
-				console.clear(); // Limpia la consola para mostrar solo las instrucciones
-				console.log(filetext);
-			}
-		} catch (error) {
-			console.error(`${(error as Error).name}: ${(error as Error).message}`);
-			rls.keyInPause("Presione cualquier tecla para continuar...", {guide: false}); // Pausa antes del volver al menú			
-		}		
+		console.log(Util.leerArchivo(`${this.constructor.name}.ins`, [{clave: '$<NOMBRE>', valor: this.nombre}]));
 	}
 
 	//Muestra el Menú Principal
