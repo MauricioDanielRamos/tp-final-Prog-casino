@@ -1,7 +1,7 @@
 import { Juego } from "./Juego";
 import { Sesiones } from "./Sesiones";
 import { Usuario } from "./Usuario";
-
+import { Util, ParValorClave } from "./Util";
 import * as rls from "readline-sync";
 
 //Implementación de la clase SesionCasino
@@ -28,24 +28,8 @@ export class Casino {
 	}
 
 	//Muestra una guía que indica al usuario como jugar en el Casino
-	private mostrarInstrucciones() {
-		console.clear(); // Limpia la consola para mostrar solo las instrucciones
-		console.log("╔════════════════════════════════════════════════╗");
-		console.log("║          Guía para jugar en el Casino          ║");
-		console.log("╚════════════════════════════════════════════════╝");
-		console.log(`
-        Bienvenido a ${this.getNombre()}
-      
-        Para comenzar a jugar, siga estos pasos:
-        
-            1. Ingrese su nombre de usuario.
-            2. Cargue créditos para jugar.
-            3. Seleccione el juego de su preferencia.
-            4. Siga las instrucciones del juego elegido.
-      
-        ¡Disfrute y buena suerte!
-        `);
-		console.log("══════════════════════════════════════════════════");
+	private mostrarInstrucciones(reemplazos?:ParValorClave[]) {
+		console.log(Util.leerArchivo(`${this.constructor.name}.ins`, reemplazos));
 	}
 
 	//Muestra el Menú Principal
@@ -61,7 +45,7 @@ export class Casino {
 			// Repite hasta que se seleccione la opción de salir
 			try {
 				console.clear();
-				this.mostrarInstrucciones(); // Mostrar las instrucciones
+				this.mostrarInstrucciones([{clave: '$<NOMBRE>', valor: this.nombre}]); // Mostrar las instrucciones
 
 				opcion = rls.keyInSelect(menuPrincipal, "Opción: ", {
 					guide: false,

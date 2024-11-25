@@ -1,5 +1,6 @@
 import { Usuario } from "./Usuario";
 import { IJuego } from "./IJuego";
+import { ParValorClave, Util } from "./Util";
 
 export abstract class Juego implements IJuego {
 	//nombre del juego
@@ -13,6 +14,13 @@ export abstract class Juego implements IJuego {
 	// Obtiene el nombre del Juego
 	public getNombre(): string {
 		return this.nombre;
+	}
+
+
+	// Lee las instrucciones desde un archivo con el mismo nombre de la clase
+	// pero extension .ins "Ej: Juego.ins"
+	protected  mostrarInstrucciones(reemplazos?:ParValorClave[]) : void{
+		console.log(Util.leerArchivo(`./${this.constructor.name}.ins`, reemplazos));
 	}
 
 	/* Declara un método abstracto llamado "jugar" que debe ser implementado en las clases hijas.
