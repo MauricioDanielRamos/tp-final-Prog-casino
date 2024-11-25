@@ -1,6 +1,6 @@
-import { Usuario } from "./Usuario";
+import { Sesion } from "./Sesion";
 
 export interface IJuego {
 	getNombre(): string;
-	jugar(usuario: Usuario): void;
+	jugar(sesion: Sesion): void;
 }
