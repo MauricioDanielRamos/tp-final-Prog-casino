@@ -1,7 +1,7 @@
 import { Juego } from "./Juego";
 import { Sesiones } from "./Sesiones";
 import { Usuario } from "./Usuario";
-
+import { readFileSync } from 'node:fs';
 import * as rls from "readline-sync";
 
 //Implementación de la clase SesionCasino
@@ -29,23 +29,16 @@ export class Casino {
 
 	//Muestra una guía que indica al usuario como jugar en el Casino
 	private mostrarInstrucciones() {
-		console.clear(); // Limpia la consola para mostrar solo las instrucciones
-		console.log("╔════════════════════════════════════════════════╗");
-		console.log("║          Guía para jugar en el Casino          ║");
-		console.log("╚════════════════════════════════════════════════╝");
-		console.log(`
-        Bienvenido a ${this.getNombre()}
-      
-        Para comenzar a jugar, siga estos pasos:
-        
-            1. Ingrese su nombre de usuario.
-            2. Cargue créditos para jugar.
-            3. Seleccione el juego de su preferencia.
-            4. Siga las instrucciones del juego elegido.
-      
-        ¡Disfrute y buena suerte!
-        `);
-		console.log("══════════════════════════════════════════════════");
+		try{
+			let filetext = readFileSync(`./${this.constructor.name}.ins`,'utf8');
+			if (filetext.length>0){
+				console.clear(); // Limpia la consola para mostrar solo las instrucciones
+				console.log(filetext);
+			}
+		} catch (error) {
+			console.error(`${(error as Error).name}: ${(error as Error).message}`);
+			rls.keyInPause("Presione cualquier tecla para continuar...", {guide: false}); // Pausa antes del volver al menú			
+		}		
 	}
 
 	//Muestra el Menú Principal

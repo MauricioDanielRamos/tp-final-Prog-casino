@@ -42,6 +42,8 @@ export class JuegoPrueba extends Juego {
 			`Ejecutando prueba de juego conceptual ${this.getNombre()}`
 		);
 
+		this.mostrarInstrucciones();
+
 		rls.keyInPause("Presione cualquier tecla para continuar...", {
 			guide: false,
 		});
