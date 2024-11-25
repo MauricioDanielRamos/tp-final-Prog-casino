@@ -1,7 +1,7 @@
 import { Juego } from "./Juego";
 import { Sesiones } from "./Sesiones";
 import { Usuario } from "./Usuario";
-import { Util } from "./Util";
+import { Util, ParValorClave } from "./Util";
 import * as rls from "readline-sync";
 
 //Implementación de la clase SesionCasino
@@ -28,8 +28,8 @@ export class Casino {
 	}
 
 	//Muestra una guía que indica al usuario como jugar en el Casino
-	private mostrarInstrucciones() {
-		console.log(Util.leerArchivo(`${this.constructor.name}.ins`, [{clave: '$<NOMBRE>', valor: this.nombre}]));
+	private mostrarInstrucciones(reemplazos?:ParValorClave[]) {
+		console.log(Util.leerArchivo(`${this.constructor.name}.ins`, reemplazos));
 	}
 
 	//Muestra el Menú Principal
@@ -45,7 +45,7 @@ export class Casino {
 			// Repite hasta que se seleccione la opción de salir
 			try {
 				console.clear();
-				this.mostrarInstrucciones(); // Mostrar las instrucciones
+				this.mostrarInstrucciones([{clave: '$<NOMBRE>', valor: this.nombre}]); // Mostrar las instrucciones
 
 				opcion = rls.keyInSelect(menuPrincipal, "Opción: ", {
 					guide: false,
