@@ -90,7 +90,10 @@ export class TragamonedaAnimal extends Juego implements ITragamoneda {
         });
     
         while (true) {        
-            let indice = rls.questionInt(`Ingresa el numero del emoji que deseas: `, {guide: false, limit:`$<1..${this.rodillos.length}`})-1;
+            let indice = parseInt(rls.question(`Ingresa el numero del emoji que deseas: `, 
+                                                {guide: false, 
+                                                limit:`$<1..${this.rodillos.length}>`,
+                                                limitMessage: 'Seleccione un número de emoji válido.'}))-1;
             
             this.emojiFavorito = this.rodillos[indice];
             console.log(`Has elegido: ${this.emojiFavorito}`);
