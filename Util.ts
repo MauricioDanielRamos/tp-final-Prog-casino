@@ -22,4 +22,9 @@ export class Util {
         }
         return resultado;
     }
+    
+    // Convierte un número a moneda argentina
+    public static convertirAPesosAR(creditos: number): string{
+        return `$ ${creditos.toLocaleString("es-AR", {minimumFractionDigits: 2,maximumFractionDigits: 2,})} ARS`;
+    }
 }
