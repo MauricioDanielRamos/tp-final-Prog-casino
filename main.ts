@@ -1,10 +1,6 @@
 import { Casino } from "./Casino";
-import { Juego } from "./Juego";
-import { JuegoPrueba } from "./JuegoPrueba";
 import { BlackJack } from "./BlackJack";
 
-const j1: Juego = new JuegoPrueba("Juego Conceptual 1");
-const j2: Juego = new JuegoPrueba("Juego Conceptual 2");
+const sesionCasino: Casino = new Casino("CASINO ROYALE", [new BlackJack('BlackJack')]);
 
-const sesionCasino: Casino = new Casino("CASINO ROYALE", [j1, j2, new BlackJack('BlackJack')]);
 sesionCasino.mostrarMenu();

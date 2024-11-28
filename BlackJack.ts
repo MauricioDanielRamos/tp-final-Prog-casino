@@ -1,5 +1,6 @@
 import { Juego } from "./Juego";
 import { Usuario } from "./Usuario";
+import { Util } from "./Util"
 import * as rls from "readline-sync";
 
 // Definimos un valor mínimo de créditos para poder jugar
@@ -23,26 +24,6 @@ export class BlackJack extends Juego {
 		super(nombre); // Llama al constructor de la clase base (Juego) con el nombre del juego
 	}
 
-	// Retorna un string con la representación en moneda argentina del valor numérico de créditos
-	private aPesosAR(creditos: number): string{
-		return `$ ${creditos.toLocaleString("es-AR", {minimumFractionDigits: 2,maximumFractionDigits: 2,})} ARS`;
-	}
-
-	private mostrarInstrucciones(usuario: Usuario): void{	
-		console.clear(); // Limpia la consola para mostrar solo las instrucciones
-		console.log("╔════════════════════════════════════════════════╗");
-		console.log("║          Guía para jugar a BlackJack           ║");
-		console.log("╚════════════════════════════════════════════════╝");
-		console.log(`
-        Bienvenido ${usuario.getNombre()}
-
-        El objetivo del blackjack es obtener una mano lo más cercana posible a 21 puntos sin pasarse.   
-      
-        ¡Disfrute y buena suerte!
-        `);
-		console.log("══════════════════════════════════════════════════");
-	}
-
 	// Sobreescribe el método jugar de la clase para implementar la lógica de este juego
 	public jugar(usuario: Usuario): void {
 		// 
@@ -53,12 +34,14 @@ export class BlackJack extends Juego {
 		// Verifica si los créditos disponibles en la sesión son suficientes para poder jugar
 		if (usuario.getCreditos() < CREDITOS_MINIMOS) {
 			// Si los créditos son insuficientes, lanza un error
-			throw new Error(`Error: Créditos insuficientes (${this.aPesosAR(usuario.getCreditos())}). (Mínimo: ${this.aPesosAR(CREDITOS_MINIMOS)})`);
+			throw new Error(`Error: Créditos insuficientes (${Util.convertirAPesosAR(usuario.getCreditos())}). (Mínimo: ${Util.convertirAPesosAR(CREDITOS_MINIMOS)})`);
 		}
         
         let volver: boolean = false;
         while (!volver){
-            this.mostrarInstrucciones(usuario);
+            this.mostrarInstrucciones([{clave: '$<NOMBRE_USUARIO>', valor: usuario.getNombre()},
+                                       {clave: '$<CREDITOS', valor: Util.convertirAPesosAR(usuario.getCreditos())}
+                                      ]);
             
             // Inicialmente solo se apostar o salir
             switch (rls.keyInSelect(['Apostar', 'Salir del Juego'], 'Opción: ', {guide: false, cancel: false})){
@@ -79,16 +62,16 @@ export class BlackJack extends Juego {
         let sePasoDe21 = false;
         while (continuar){
             console.clear();
-            console.log("╔════════════════════════════════════════════════╗");
-            console.log("║                   BlackJack                    ║");
-            console.log("╚════════════════════════════════════════════════╝");
+            console.log('╔═══════════════════════════════════════════════════════════════════════════════════════════════╗');
+            console.log('║                                   Guía para jugar a BlackJack                                 ║');
+            console.log('╚═══════════════════════════════════════════════════════════════════════════════════════════════╝');
+            console.log(`Jugador: ${usuario.getNombre()} Créditos: ${Util.convertirAPesosAR(usuario.getCreditos())}`);
             console.log();
 
             //Muestra las manos en la etapa Inicial
-            this.mostrarMano('Maso: ', this.maso, false); // TEST
+            //this.mostrarMano('Maso: ', this.maso, false); // TEST
             this.mostrarMano('Máquina:', this.manoMaquina, true);
-            this.mostrarMano(`${usuario.getNombre()}`, this.manoUsuario, false);
-
+            this.mostrarMano(`${usuario.getNombre()} (${this.calcularMano(this.manoUsuario)})`, this.manoUsuario, false);                
             switch(rls.keyInSelect(['Pedir', 'Plantarse'], 'Elije: ', {guide: false, cancel: false})){
                 case 0: this.repartirCarta(this.manoUsuario); break
                 case 1: continuar = false;
@@ -101,37 +84,32 @@ export class BlackJack extends Juego {
                 continuar = false;
             }
 
-            //Muestra las manos en la etapa final de la jugada
+            //Muestra la mano de la maquina completa si ya terminó de ju
             if (!continuar){
-                this.mostrarMano(`Máquina (${this.calcularMano(this.manoMaquina)})`, this.manoMaquina, continuar);
-            }else{
-                this.mostrarMano(`Máquina`, this.manoMaquina, continuar);
-            }                       
-            this.mostrarMano(`${usuario.getNombre()} (${this.calcularMano(this.manoUsuario)})`, this.manoUsuario, false);                
-
-            if (continuar){
-                rls.keyInPause("Presione cualquier tecla para continuar...", {guide: false,});
+                this.mostrarMano(`Máquina (${this.calcularMano(this.manoMaquina)})`, this.manoMaquina, false);
             }
         }
         
         //Turno de la máquina
         while (!sePasoDe21 && this.calcularMano(this.manoMaquina)<17){            
             this.repartirCarta(this.manoMaquina);
-
-            //Muestra las manos en la etapa final de la jugada
-            this.mostrarMano(`Máquina (${this.calcularMano(this.manoMaquina)})`, this.manoMaquina, false);
-            this.mostrarMano(`${usuario.getNombre()} (${this.calcularMano(this.manoUsuario)})`, this.manoUsuario, false);                
-            //rls.keyInPause("Presione cualquier tecla para continuar...", {guide: false,});                
         }        
+        
+        //Calculo los resultados de la partida
         this.calcularResultados(usuario);
-        rls.keyInPause("Presione cualquier tecla para continuar...", {guide: false,});                            
+        
+        rls.keyInPause("Presione cualquier tecla para continuar...", {guide: false,});
+        
     } 
 
     // Calcula los resultados de la partida
     private calcularResultados(usuario: Usuario): void{
-        //SE PASA EL USUARIO
+        //Se pasa el usuario
         if (this.calcularMano(this.manoUsuario)>21){
             console.log(`Te pasaste, gana la máquina`);        
+        //Se pasa la máquina
+        } else if (this.calcularMano(this.manoMaquina)>21){
+            console.log(`Se paso la maquina. Gana ${usuario.getNombre()}`);
         //Gana Maquina por BlackJack
         } else if ((this.calcularMano(this.manoMaquina)==21 && this.manoMaquina.length==2) && (this.calcularMano(this.manoUsuario)==21 && this.manoUsuario.length!==2)){
             console.log(`Gana Maquina con BlackJack`);
@@ -143,9 +121,8 @@ export class BlackJack extends Juego {
             console.log(`Empate de Black Jack`);
         //Empate fuera de BlackJack
         } else if (this.calcularMano(this.manoMaquina)==this.calcularMano(this.manoUsuario)){ 
-              console.log(`Empate a ${this.calcularMano(this.manoMaquina)}.`);
-        } else if (this.calcularMano(this.manoMaquina)>21){
-            console.log(`Se paso la maquina. Gana ${usuario.getNombre()}`);
+              console.log(`Empate a ${this.calcularMano(this.manoMaquina)}.`);        
+        // Las manos son diferentes
         } else {
             const difManoMaquina = 21 - this.calcularMano(this.manoMaquina);
             const difManoUsuario = 21 - this.calcularMano(this.manoUsuario);
@@ -154,7 +131,7 @@ export class BlackJack extends Juego {
             } else if (difManoMaquina<difManoUsuario){
                 console.log(`Gana la máquina`);
             }
-        } 
+        }
     }
 
     // Calcula el valor de una mano
@@ -194,7 +171,7 @@ export class BlackJack extends Juego {
 
     //Solicita al usuario que realice una apuesta
     private solicitarApuesta(usuario: Usuario){
-        let apuesta: number = rls.questionInt(`Ingrese su apuesta (Minimo: ${this.aPesosAR(CREDITOS_MINIMOS)}): `, {unmatchMessage: 'Ingrese un valor de apuesta válido.'})
+        let apuesta: number = rls.questionInt(`Ingrese su apuesta (Minimo: ${Util.convertirAPesosAR(CREDITOS_MINIMOS)}): `, {unmatchMessage: 'Ingrese un valor de apuesta válido.'})
         if (apuesta<CREDITOS_MINIMOS || apuesta>usuario.getCreditos()){
             throw Error('Apuesta inválida o créditos insuficientes.');
         }
