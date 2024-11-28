@@ -24,23 +24,10 @@ export class JuegoPrueba extends Juego {
 			throw new Error("Error: Créditos insuficientes.");
 		}
 
-		// Si todo es válido, muestra un mensaje de bienvenida al usuario
-		console.log(`Bienvenido ${usuario.getNombre()}`);
-
-		// Muestra la cantidad de créditos actuales de la sesión, formateados con 2 decimales
-		console.log(
-			`Créditos actuales: ${usuario.getCreditos().toLocaleString("es-AR", {
-				minimumFractionDigits: 2,
-				maximumFractionDigits: 2,
-			})}`
-		);
-
-		console.log(); //Imprime una línea en blanco para mejorar la legibilidad
-
-		// Muestra información sobre el juego que se está ejecutando
-		console.info(
-			`Ejecutando prueba de juego conceptual ${this.getNombre()}`
-		);
+		this.mostrarInstrucciones([{clave: "$<NOMBRE_USUARIO>", valor: usuario.getNombre()},
+								   {clave: "$<CREDITOS>", valor: usuario.getCreditos()},
+								   {clave: "$<NOMBRE_JUEGO>", valor: this.getNombre()}								   
+								  ]);
 
 		rls.keyInPause("Presione cualquier tecla para continuar...", {
 			guide: false,
