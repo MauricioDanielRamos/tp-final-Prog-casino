@@ -13,7 +13,7 @@ export class Util {
             if (resultado.length>0){
                 //Si se pasaron reemplazos de texto
                 if (reemplazos!==undefined){
-                    reemplazos.forEach((reemplazo)=>resultado = resultado.replace(reemplazo.clave, reemplazo.valor))
+                    reemplazos.forEach((reemplazo)=>resultado = resultado.replace(`/${reemplazo.clave}/g`, reemplazo.valor))
                 }            
             }
         } catch (error) {
