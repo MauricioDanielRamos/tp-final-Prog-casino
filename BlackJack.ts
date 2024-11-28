@@ -1,4 +1,3 @@
-import { log } from "console";
 import { Juego } from "./Juego";
 import { Usuario } from "./Usuario";
 import { Util } from "./Util"
