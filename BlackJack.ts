@@ -1,3 +1,4 @@
+import { log } from "console";
 import { Juego } from "./Juego";
 import { Usuario } from "./Usuario";
 import { Util } from "./Util"
@@ -234,13 +235,45 @@ export class BlackJack extends Juego {
     //  nombre: Nombre del propietario de la mano
     //  mano: listado de cartas
     //  ocultarUltima: Si debe mostrar o no la última carta de la mano
-    private mostrarMano(nombre: string, mano: string[], ocultarUltima: boolean): void{
+    /*private mostrarMano(nombre: string, mano: string[], ocultarUltima: boolean): void{
         let manoMostrar: string[] = [...mano];
         if (ocultarUltima){
             manoMostrar[mano.length-1]='[ ? ]'
         }
         console.log(`Mano de ${nombre}:`);
         console.log(manoMostrar);
+        this.dibujarcartas(mano);
+    }*/
+    private mostrarMano(nombre: string, mano: string[], ocultarUltima: boolean): void{
+        let encabezados: string = '';
+        let numeros: string = '';
+        let palos: string = '';
+        let espacios: string = '';
+        let pies: string = '';
+        mano.forEach((carta, indice)=>{
+            encabezados+='┌───┐';            
+            let numero: string = carta.slice(1);
+            if (ocultarUltima && indice == mano.length-1){
+                numeros+=`│   │`;    
+            }else if (numero == '10'){
+                numeros+=`│ ${numero}│`;    
+            }else{
+                numeros+=`│  ${numero}│`;    
+            }            
+            if (ocultarUltima && indice == mano.length-1){
+                palos+=`│ ? │`;    
+            } else {
+                palos+=`│ ${carta[0]} │`;
+            }
+            espacios+=`│   │`;
+            pies+='└───┘';
+        });
+        console.log(`Mano de ${nombre}:`);
+        console.log(encabezados);
+        console.log(numeros);
+        console.log(palos);
+        console.log(espacios);
+        console.log(pies);
     }
 
     //Genera la mano inicial (2 cartas para el jugador y la máquina)
@@ -254,5 +287,4 @@ export class BlackJack extends Juego {
         this.repartirCarta(this.manoUsuario);
         this.repartirCarta(this.manoMaquina);        
     }
-
 }
