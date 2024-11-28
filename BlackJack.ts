@@ -145,20 +145,20 @@ export class BlackJack extends Juego {
             console.log(`Gana Maquina con BlackJack`);
         //Gana Usuario por BlackJack
         } else if ((this.calcularMano(this.manoUsuario)==21 && this.manoUsuario.length==2) && (!(this.calcularMano(this.manoMaquina)==21 && this.manoMaquina.length!==2))){
-            console.log(`Gana ${usuario.getNombre()} con BlackJack`);
-            ganancia=(this.apuesta*2)*1.5; //Dobla la apuesta +50%
+            console.log(`Gana ${usuario.getNombre()} con BlackJack`);            
+            ganancia=(this.apuesta*2)+(this.apuesta*0.5); //Dobla la apuesta +50%
         //Empatan por BlackJack
         } else if ((this.calcularMano(this.manoMaquina)==21 && this.manoMaquina.length==2) && (this.calcularMano(this.manoUsuario)==21 && this.manoUsuario.length==2)){
-            console.log(`Empate de Black Jack`);
-            ganancia=this.apuesta; //Recupera la apuesta
+            console.log(`Empate de Black Jack. Recupera la apuesta.`);
+            usuario.setCreditos(this.apuesta) //Recupera la apuesta;
         //Se pasa la máquina
         } else if (this.calcularMano(this.manoMaquina)>21){
         console.log(`Se paso la maquina. Gana ${usuario.getNombre()}`);
         ganancia=this.apuesta*2; //Dobla la apuesta
         //Empate fuera de BlackJack
         } else if (this.calcularMano(this.manoMaquina)==this.calcularMano(this.manoUsuario)){ 
-              console.log(`Empate a ${this.calcularMano(this.manoMaquina)}.`);
-              usuario.setCreditos(this.apuesta); //Recupera la apuesta
+              console.log(`Empate a ${this.calcularMano(this.manoMaquina)}. Recupera la apuesta.`);
+              usuario.setCreditos(this.apuesta);
         // Las manos son diferentes
         } else {
             const difManoMaquina = 21 - this.calcularMano(this.manoMaquina);
