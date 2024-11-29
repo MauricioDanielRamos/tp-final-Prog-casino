@@ -18,11 +18,11 @@ export class TragamonedaFrutal extends TragamonedaBase {
             console.log(`¡Muy bien! Coincidieron 2 emojis.`);
         } else if (coincidencias === 1) {
             premio = this.apuesta;
-            console.log(`Coincidió 1 emoji.`);
+            console.log(`Coincidio 1 emoji.`);
         } else {
             console.log(`No hubo coincidencias esta vez.`);
         }
         usuario.setCreditos(premio);
-        console.log(`Tu premio es: ${premio} créditos.`);
+        console.log(`Tu premio es: ${premio} creditos.`);
     }
 }

@@ -17,7 +17,7 @@ export class Sesiones {
 		// Verificar si el usuario existe
 		if (!usuario) {
 			throw new Error(
-				`No se encontró un usuario con el ID ${id}.`
+				`No se encontro un usuario con el ID ${id}.`
 			);
 		}
 		return usuario;
@@ -39,7 +39,7 @@ export class Sesiones {
 	public eliminarUsuarioPorId(id: number): void {
 		const index = this.usuarios.findIndex((usuario) => usuario.getId() === id);
 		if (index === -1) {
-			throw new Error(`No se encontró ningún usuario con el ID ${id}.`);
+			throw new Error(`No se encontro ningun usuario con el ID ${id}.`);
 		}
 		this.usuarios.splice(index, 1); // Elimina al usuario del array
 	}
@@ -55,7 +55,7 @@ export class Sesiones {
 	public setCreditosUsuario(id: number, monto: number): void {
 		const usuario = this.usuarios.find((u) => u.getId() === id);
 		if (!usuario) {
-			throw new Error(`No se encontró un usuario con el ID ${id}.`);
+			throw new Error(`No se encontro un usuario con el ID ${id}.`);
 		}
 		usuario.setCreditos(usuario.getCreditos()+monto);
 	}
