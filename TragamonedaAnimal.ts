@@ -7,10 +7,22 @@ export class TragamonedaAnimal extends TragamonedaBase {
         this.rodillos = [`🦁`, `🐯`, `🐻`, `🐼`, `🐨`, `🐸`, `🐵`, `🦊`, `🐴`, `🐶`];
     }
 
+    protected girarRodillos(): string[] {
+        const resultados: string[] = [];
+        for (let i = 0; i < 4; i++) {
+            const indiceAleatorio = Math.floor(Math.random() * this.rodillos.length);
+            resultados.push(this.rodillos[indiceAleatorio]);
+        }
+        return resultados;
+    }
+
     protected mostrarPremio(coincidencias: number, usuario: Usuario): void {
         let premio = 0;
-        if (coincidencias === 3) {
+        if (coincidencias === 4) {
             premio = this.apuesta * 15;
+            console.log(`¡Felicidades! Coincidieron los 3 emojis.`);
+        } else if (coincidencias === 3) {
+            premio = this.apuesta * 10;
             console.log(`¡Felicidades! Coincidieron los 3 emojis.`);
         } else if (coincidencias === 2) {
             premio = this.apuesta * 6;

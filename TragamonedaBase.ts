@@ -1,17 +1,15 @@
 import { Juego } from "./Juego";
 import { Usuario } from "./Usuario";
-import { ITragamoneda } from "./ITragamoneda";
 import * as rls from "readline-sync";
 
 // Clase base para Tragamoneda
-export abstract class TragamonedaBase extends Juego implements ITragamoneda {
+export abstract class TragamonedaBase extends Juego {
     protected rodillos: string[] = [];
     protected apuesta: number = 0;
     protected emojiFavorito: string = ``;
     protected creditosMinimos: number;
     public nombreJuego: string=``;
     
-
     constructor(nombre: string, creditosMinimos: number) {
         super(nombre);
         this.creditosMinimos = creditosMinimos;
