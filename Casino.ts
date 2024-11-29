@@ -36,9 +36,9 @@ export class Casino {
 	public mostrarMenu(): void {
 		const menuPrincipal: string[] = [
 			// Opciones del menú principal
-			"CONFIGURACION DE USUARIO",
-			"JUEGOS DISPONIBLES",
-			"SALIR",
+			"Menú de Usuarios",
+			"Juegos Disponibles",
+			"Salir",
 		];
 		let opcion: number = -1;
 		while (opcion !== 2) {
@@ -90,26 +90,29 @@ export class Casino {
 				// Verifica si hay usuarios configurados
 				console.log("Usuarios configurados:");
 				usuarios.forEach((usuario) => {
-					console.log(`  ID: ${usuario.getId()} - Nombre: ${usuario.getNombre()}`);
+					console.log(`  ID: ${usuario.getId()} - Nombre: ${usuario.getNombre()} - Créditos: ${Util.convertirAPesosAR(usuario.getCreditos())}`)
 				}); // Lista los usuarios con su ID y su nombre
 			} else {
-				console.log("No hay usuarios configurados."); // Mensaje si no hay usuarios
+				console.error(
+					// Muestra mensaje si no hay usuarios registrados
+					"No hay usuarios registrados. Agregue un usuario primero."
+				);
 			}
 
 			// Opciones del submenú
 			const opciones = [
-				"AGREGAR UN USUARIO",
-				"ELIMINAR UN USUARIO",
-                "CARGAR/RETIRAR CRÉDITO",
-				"VOLVER",
+				"Agregar Usuario",
+				"Eliminar Usuario",
+                "Cargar/Retirar Crédito",
+				"Volver",
 			];
 			opcion = rls.keyInSelect(opciones, "Seleccione una opción: ", {
 				guide: false,
 				cancel: false,
 			});
-
+			
 			switch (opcion) {
-				case 0: this.agregarUsuario(); break;
+				case 0: this.agregarUsuario(); opcion=3; break;
 				case 1: this.eliminarUsuario(); break;
 				case 2: this.solicitarMonto(); break;
 			}
@@ -127,7 +130,12 @@ export class Casino {
             // Agrega al usuario usando el método de la clase Sesión
             this.sesiones.agregarUsuario(nuevoNombre);
             // Mensaje de confirmación si se agrego correctamente
-            console.log(`Usuario "${nuevoNombre}" agregado con éxito!`);             
+            console.log(`Usuario "${nuevoNombre}" agregado con éxito!`);
+
+			const usuarios: Usuario[] = this.sesiones.getUsuarios();
+			const id: number = usuarios[usuarios.length-1].getId();
+			this.cargarCredito(id);
+
         } catch (error) {
             // Maneja errores de validación
             console.error(`${(error as Error).message}`);
@@ -148,7 +156,7 @@ export class Casino {
 		const usuarios = this.sesiones.getUsuarios(); //Obtener la lista de usuarios desde la sesion
 		if (usuarios.length === 0) {
 			// Verifica si hay usuarios registrados
-			console.log(
+			console.error(
 				// Muestra mensaje si no hay usuarios registrados
 				"No hay usuarios registrados. Agregue un usuario primero."
 			);
@@ -181,7 +189,7 @@ export class Casino {
 				break;
 
 			case 2: // Volver al menú anterior
-				return;
+				return;			
 		}
 	}
 
@@ -209,7 +217,7 @@ export class Casino {
 			usuario?.setCreditos(-monto); // Reduce el monto en los creditos del usurio
 			
             console.log(
-				`¡Retiro exitoso! Se han retirado $${Util.convertirAPesosAR(monto)} del usuario con ID ${idUsuario}.` // Muestra confirmación
+				`¡Carga Exitosa! Se han retirado ${Util.convertirAPesosAR(monto)} al jugador ${usuario.getNombre()}.` // Muestra la confirmación
 			);
 			rls.keyInPause("Presione cualquier tecla para continuar...", {
 				guide: false,
@@ -227,12 +235,17 @@ export class Casino {
 	}
 
 	// Función para cargar créditos a un usuario
-	private cargarCredito(): void {
-		try {
-			// Solicita el ID a el usuario
-			const idUsuario = rls.questionInt(
-				"Ingrese el ID del usuario al que desea cargar crédito: "
-			);
+	private cargarCredito(idUsuario?:number): void {
+		try {	
+			let entrePorID = false;		
+			if (!idUsuario){
+				// Solicita el ID a el usuario
+				idUsuario = rls.questionInt(
+					"Ingrese el ID del usuario al que desea cargar crédito: "
+				);
+			}else{
+				entrePorID = true;
+			}
 			// Solicita el monto
 			const monto = rls.questionFloat("Ingrese el monto a cargar: ");
 
@@ -248,12 +261,18 @@ export class Casino {
 			// Agrega el monto a los créditos del usuario
 			usuario.setCreditos(monto); // Incrementa los créditos del usuario
 			console.log(
-				`¡Carga Exitosa! Se han cargado $${Util.convertirAPesosAR(monto)} al usuario con ID ${idUsuario}.` // Muestra la confirmación
+				`¡Carga Exitosa! Se han cargado ${Util.convertirAPesosAR(monto)} al jugador ${usuario.getNombre()}.` // Muestra la confirmación
 			);
 			rls.keyInPause("Presione cualquier tecla para continuar...", {
 				guide: false,
 			});
-			this.solicitarMonto(); // Vuelve al menú de créditos
+
+			//Dependiendo de como se llamo la función es al menú que vuelve
+			if (entrePorID){
+				this.menuUsuarios();  // Vuelve al menú de usuarios
+			}else{
+				this.solicitarMonto(); // Vuelve al menú de créditos
+			}
 		} catch (error) {
 			// Maneja errores durante el proceso
 			console.error(`${(error as Error).message}`);
@@ -276,13 +295,18 @@ export class Casino {
 			juego.getNombre()
 		);
 		// Agrega una opcion para volver al menú anterior
-		menuJuegos.push("VOLVER");
+		menuJuegos.push("Volver");
 
 		let opcionJuegos: number = -1;
 		//Repite hasta que se elija la útima opción (VOLVER)
 		while (opcionJuegos !== menuJuegos.length - 1) {
             try{
                 console.clear();
+				console.clear();
+				console.log("╔═════════════════════════════════════════════╗");
+				console.log("║       Cargar o Retirar Monto de Dinero      ║");
+				console.log("╚═════════════════════════════════════════════╝");				
+
                 opcionJuegos = rls.keyInSelect(menuJuegos, "Opción: ", {
                     guide: false,
                     cancel: false,
@@ -349,7 +373,10 @@ export class Casino {
             }
         } else {
             // Mensaje si no hay usuarios para eliminar
-            console.log("No hay usuarios para eliminar.");
+			console.error(
+				// Muestra mensaje si no hay usuarios registrados
+				"No hay usuarios registrados. Agregue un usuario primero."
+			);
             rls.keyInPause(
                 "Presione cualquier tecla para continuar...",
                 { guide: false }
