@@ -24,7 +24,7 @@ export abstract class TragamonedaBase extends Juego {
             throw new Error(`Error: Créditos insuficientes.`);
         }
 
-        console.log(`Bienvenido ${usuario.getNombre()} al juego de ${this.nombreJuego}`);
+        console.log(`Bienvenido ${usuario.getNombre()} al juego de ${this.getNombre()}`);
         console.log(
             `Créditos actuales: ${usuario.getCreditos().toLocaleString(`es-AR`, {
                 minimumFractionDigits: 2,
