@@ -50,6 +50,9 @@ export abstract class TragamonedaBase extends Juego {
                 }
             } else if (comenzar === `n`) {
                 console.log(`¡Gracias por jugar!`);
+                rls.keyInPause(`Presione cualquier tecla para continuar...`, {
+                    guide: false,
+                });
                 break;
             } else {
                 console.error(`Por favor, escribe una opción válida.`);
