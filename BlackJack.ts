@@ -33,10 +33,10 @@ export class BlackJack extends Juego {
        
         let volver: boolean = false;
         while (!volver){
-            // Verifica si los creditos disponibles en la sesión son suficientes para poder jugar
+            // Verifica si los créditos disponibles en la sesión son suficientes para poder jugar
             if (usuario.getCreditos() < CREDITOS_MINIMOS) {
-                // Si los creditos son insuficientes, lanza un error
-                throw new Error(`Error: Creditos insuficientes (${Util.convertirAPesosAR(usuario.getCreditos())}). (Mínimo: ${Util.convertirAPesosAR(CREDITOS_MINIMOS)})`);
+                // Si los créditos son insuficientes, lanza un error
+                throw new Error(`Error: Creditos insuficientes (${Util.convertirAPesosAR(usuario.getCreditos())}). (Mínimo: ${Util.convertirAPesosAR(CREDITOS_MINIMOS)})`);            
             }
 
             this.mostrarInstrucciones([{clave: '$<NOMBRE_USUARIO>', valor: usuario.getNombre()},
@@ -151,7 +151,7 @@ export class BlackJack extends Juego {
         } else if ((this.calcularMano(this.manoMaquina)==21 && this.manoMaquina.length==2) && (this.calcularMano(this.manoUsuario)==21 && this.manoUsuario.length==2)){
             console.log(`Empate de Black Jack. Recupera la apuesta.`);
             usuario.setCreditos(this.apuesta) //Recupera la apuesta;
-        //Se pasa la maquina
+        //Se pasa la máquina
         } else if (this.calcularMano(this.manoMaquina)>21){
         console.log(`Se paso la maquina. Gana ${usuario.getNombre()}`);
         ganancia=this.apuesta*2; //Dobla la apuesta
@@ -275,7 +275,7 @@ export class BlackJack extends Juego {
         console.log(pies);
     }
 
-    //Genera la mano inicial (2 cartas para el jugador y la maquina)
+    //Genera la mano inicial (2 cartas para el jugador y la máquina)
     private generarManoInicial(): void{
         console.log(`Reparto inicial`);
         this.maso = [...MASO_INICIAL]; //Inicializo el maso        
