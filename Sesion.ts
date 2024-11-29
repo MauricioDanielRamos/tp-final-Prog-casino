@@ -1,6 +1,7 @@
 import { Usuario } from "./Usuario";
+import { Util } from "./Util";
 
-export class Sesiones {
+export class Sesion {
 	// Lista los usuarios con un ID único, nombre y créditos
 	private usuarios: Usuario[]; // Usuarios con ID único
 	private idContador: number; // Contador para IDs únicos
@@ -23,16 +24,24 @@ export class Sesiones {
 		return usuario;
 	}		
 
-	// Obtiene la lista de usuarios
-	public getUsuarios(): Usuario[] {
-		return [...this.usuarios];
+	// Retorna la cantidad de usuarios cargados
+	public getCantUsuarios(): number{
+		return this.usuarios.length;
+	}
+
+	// Imprime el listado de usuarios
+	public imprimirListadoUsuarios(): void{
+		this.usuarios.forEach((usuario) => {
+			console.log(`  ID: ${usuario.getId()} - Nombre: ${usuario.getNombre()} - Creditos: ${Util.convertirAPesosAR(usuario.getCreditos())}`)
+		});
 	}
 
 	// Agrega un usuario nuevo con ID único y creditos iniciales
-	public agregarUsuario(nombre: string): void {
+	public agregarUsuario(nombre: string): number {
 		const usuario = new Usuario(this.idContador, nombre, 0)
-		this.usuarios.push(usuario); // Agrega un nuevo Usuario
+		const ultimo = this.usuarios.push(usuario)-1; // Agrega un nuevo Usuario
 		this.idContador++;
+		return this.usuarios[ultimo].getId();
 	}
 
 	// Elimina un usuario utilizando el ID
