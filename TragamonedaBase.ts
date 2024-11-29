@@ -21,19 +21,19 @@ export abstract class TragamonedaBase extends Juego {
         }
 
         if (usuario.getCreditos() < this.creditosMinimos) {
-            throw new Error(`Error: Créditos insuficientes.`);
+            throw new Error(`Error: Creditos insuficientes.`);
         }
 
         console.log(`Bienvenido ${usuario.getNombre()} al juego de ${this.getNombre()}`);
         console.log(
-            `Créditos actuales: ${usuario.getCreditos().toLocaleString(`es-AR`, {
+            `Creditos actuales: ${usuario.getCreditos().toLocaleString(`es-AR`, {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
             })}`
         );
 
         while (true) {
-            console.log(`\nEstás listo para comenzar el juego?`);
+            console.log(` Estas listo para comenzar el juego?`);
             const comenzar = rls.question(`Escribe 's' para iniciar o 'n' para terminar: `).toLowerCase();
 
             if (comenzar === `s`) {
@@ -42,7 +42,7 @@ export abstract class TragamonedaBase extends Juego {
                 this.IniciarJuego(usuario);
 
                 if (usuario.getCreditos() < this.creditosMinimos) {
-                    console.log(`No tienes suficientes créditos para jugar.`);
+                    console.log(`No tienes suficientes creditos para jugar.`);
                     rls.keyInPause(`Presione cualquier tecla para continuar...`, {
                         guide: false,
                     });
@@ -55,24 +55,24 @@ export abstract class TragamonedaBase extends Juego {
                 });
                 break;
             } else {
-                console.error(`Por favor, escribe una opción válida.`);
+                console.error(`Por favor, escribe una opcion valida.`);
             }
         }
     }
 
     protected establecerApuesta(usuario: Usuario): void {
         while (true) {
-            const apuestaIngresada = rls.question(`Ingresa tu apuesta (mínimo ${this.creditosMinimos} créditos): `);
+            const apuestaIngresada = rls.question(`Ingresa tu apuesta (minimo ${this.creditosMinimos} creditos): `);
             const apuesta = parseInt(apuestaIngresada);
 
             if (!isNaN(apuesta) && apuesta >= this.creditosMinimos && apuesta <= usuario.getCreditos()) {
                 this.apuesta = apuesta;
                 usuario.setCreditos(-apuesta);
-                console.log(`Has apostado ${apuesta} créditos.`);
+                console.log(`Has apostado ${apuesta} creditos.`);
                 break;
             } else {
                 console.error(
-                    `Por favor, ingresa un valor válido entre ${this.creditosMinimos} y tus créditos disponibles (${usuario.getCreditos()}).`
+                    `Por favor, ingresa un valor valido entre ${this.creditosMinimos} y tus craditos disponibles (${usuario.getCreditos()}).`
                 );
             }
         }
@@ -93,13 +93,13 @@ export abstract class TragamonedaBase extends Juego {
                 console.log(`Has elegido: ${this.emojiFavorito}`);
                 break;
             } else {
-                console.error(`Por favor, selecciona un número válido.`);
+                console.error(`Por favor, selecciona un número valido.`);
             }
         }
     }
 
     protected IniciarJuego(usuario: Usuario): void {
-        console.log(`¡Los rodillos están girando!`);
+        console.log(`¡Los rodillos estan girando!`);
         const resultado = this.girarRodillos();
         const coincidencias = this.calcularCoincidencias(resultado);
         console.log(`Resultado: ${resultado.join(` | `)}`);

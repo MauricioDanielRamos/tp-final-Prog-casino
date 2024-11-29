@@ -21,7 +21,7 @@ export class Usuario {
 			throw new Error("El nombre debe contener al menos 3 caracteres.");
 		}
 		if (nombre.match(/\d/)) {
-			throw new Error("El nombre no puede contener números.");
+			throw new Error("El nombre no puede contener numeros.");
 		}
         this.nombre = nombre;
     }
@@ -41,7 +41,7 @@ export class Usuario {
     public setCreditos(creditos: number): void{
 		if ((this.getCreditos() + creditos) < 0) {
 			throw new Error(
-				"No hay suficientes créditos para realizar esta operación."
+				"No hay suficientes creditos para realizar esta operacion."
 			);
 		}
         this.creditos=this.getCreditos()+creditos;

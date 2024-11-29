@@ -15,7 +15,7 @@ export class Casino {
 	constructor(nombre: string, juegos: Juego[]) {
 		// Valida que el nombre del casino sea válido
 		if (nombre == undefined || nombre.length < 1) {
-			throw new Error("Nombre no válido.");
+			throw new Error("Nombre no valido.");
 		}
         this.nombre = nombre;        
 		this.juegos = juegos;        //Falta validar acá
@@ -36,23 +36,23 @@ export class Casino {
 	public mostrarMenu(): void {
 		const menuPrincipal: string[] = [
 			// Opciones del menú principal
-			"Menú de Usuarios",
+			"Menu de Usuarios",
 			"Juegos Disponibles",
 			"Salir",
 		];
 		let opcion: number = -1;
 		while (opcion !== 2) {
-			// Repite hasta que se seleccione la opción de salir
+			// Repite hasta que se seleccione la opcion de salir
 			try {
 				console.clear();
 				this.mostrarInstrucciones([{clave: '$<NOMBRE>', valor: this.nombre}]); // Mostrar las instrucciones
 
-				opcion = rls.keyInSelect(menuPrincipal, "Opción: ", {
+				opcion = rls.keyInSelect(menuPrincipal, "Opcion: ", {
 					guide: false,
 					cancel: false,
 				});
 				switch (
-					opcion // Ejecuta acciones basadas en la opción seleccionada
+					opcion // Ejecuta acciones basadas en la opcion seleccionada
 				) {
 					case 0: this.menuUsuarios(); break;
 					case 1:
@@ -78,7 +78,7 @@ export class Casino {
 		let opcion: number = -1;
 
 		while (opcion !== 3) {
-			// Repite hasta que la opción sea "VOLVER" (indice 2)
+			// Repite hasta que la opcion sea "VOLVER" (indice 2)
 			console.clear();
 			console.log("╔═══════════════════════════════════════╗");
 			console.log("║       Configuración de Usuario        ║");
@@ -90,7 +90,7 @@ export class Casino {
 				// Verifica si hay usuarios configurados
 				console.log("Usuarios configurados:");
 				usuarios.forEach((usuario) => {
-					console.log(`  ID: ${usuario.getId()} - Nombre: ${usuario.getNombre()} - Créditos: ${Util.convertirAPesosAR(usuario.getCreditos())}`)
+					console.log(`  ID: ${usuario.getId()} - Nombre: ${usuario.getNombre()} - Creditos: ${Util.convertirAPesosAR(usuario.getCreditos())}`)
 				}); // Lista los usuarios con su ID y su nombre
 			} else {
 				console.error(
@@ -103,10 +103,10 @@ export class Casino {
 			const opciones = [
 				"Agregar Usuario",
 				"Eliminar Usuario",
-                "Cargar/Retirar Crédito",
+                "Cargar/Retirar Credito",
 				"Volver",
 			];
-			opcion = rls.keyInSelect(opciones, "Seleccione una opción: ", {
+			opcion = rls.keyInSelect(opciones, "Seleccione una opcion: ", {
 				guide: false,
 				cancel: false,
 			});
@@ -130,7 +130,7 @@ export class Casino {
             // Agrega al usuario usando el método de la clase Sesión
             this.sesiones.agregarUsuario(nuevoNombre);
             // Mensaje de confirmación si se agrego correctamente
-            console.log(`Usuario "${nuevoNombre}" agregado con éxito!`);
+            console.log(`Usuario "${nuevoNombre}" agregado con exito!`);
 
 			const usuarios: Usuario[] = this.sesiones.getUsuarios();
 			const id: number = usuarios[usuarios.length-1].getId();
@@ -146,7 +146,7 @@ export class Casino {
         }
     }
     
-	// Función para solicitar el monto de crédito o retiro
+	// Función para solicitar el monto de credito o retiro
 	private solicitarMonto(): void {
 		console.clear();
 		console.log("╔═════════════════════════════════════════════╗");
@@ -166,25 +166,25 @@ export class Casino {
 			return; // Sale de la función si no hay usuarios
 		}
 
-		// Mostrar usuarios registrados con su ID , nombre y créditos disponibles
+		// Mostrar usuarios registrados con su ID , nombre y creditos disponibles
 		console.log("Usuarios registrados:");
 		usuarios.forEach((usuario) => {
-			console.log(`  ID: ${usuario.getId()} - Nombre: ${usuario.getNombre()} - Créditos: ${Util.convertirAPesosAR(usuario.getCreditos())}`)
+			console.log(`  ID: ${usuario.getId()} - Nombre: ${usuario.getNombre()} - Creditos: ${Util.convertirAPesosAR(usuario.getCreditos())}`)
 		});
 
-		// Presenta opciones al usuario para cargar, retirar créditos o volver
-		const opciones = ["Cargar Crédito", "Retirar Crédito", "Volver"];
-		const opcion = rls.keyInSelect(opciones, "Seleccione una opción: ", {
+		// Presenta opciones al usuario para cargar, retirar creditos o volver
+		const opciones = ["Cargar Credito", "Retirar Credito", "Volver"];
+		const opcion = rls.keyInSelect(opciones, "Seleccione una opcion: ", {
 			guide: false,
 			cancel: false,
 		});
 
 		switch (opcion) {
-			case 0: // Cargar crédito
+			case 0: // Cargar credito
 				this.cargarCredito();
 				break;
 
-			case 1: // Retirar crédito
+			case 1: // Retirar credito
 				this.retirarCredito();
 				break;
 
@@ -193,12 +193,12 @@ export class Casino {
 		}
 	}
 
-	// Función para retirar crédito de un usuario
+	// Función para retirar credito de un usuario
 	private retirarCredito(): void {
 		try {
 			// Solicita el ID del usuario
 			const idUsuario = rls.questionInt(
-				"Ingrese el ID del usuario del que desea retirar crédito: "
+				"Ingrese el ID del usuario del que desea retirar credito: "
 			);
 
 			// Solicita el monto a retirar
@@ -213,7 +213,7 @@ export class Casino {
 			// Busca al usuario con el ID proporcionado
 			const usuario = this.sesiones.getUsuario(idUsuario);
 
-            // Realiza el retiro de crédito utilizando el metedo setCreditos
+            // Realiza el retiro de credito utilizando el metedo setCreditos
 			usuario?.setCreditos(-monto); // Reduce el monto en los creditos del usurio
 			
             console.log(
@@ -222,26 +222,26 @@ export class Casino {
 			rls.keyInPause("Presione cualquier tecla para continuar...", {
 				guide: false,
 			});
-			this.solicitarMonto(); // Vuelve al menú de créditos
+			this.solicitarMonto(); // Vuelve al menú de creditos
 		} catch (error) {
 			// Maneja errores durante el proceso
 			console.error(`${(error as Error).message}`);
 			rls.keyInPause("Presione cualquier tecla para continuar...", {
 				guide: false,
 			});
-			this.solicitarMonto(); // Vuelve al menú de créditos
+			this.solicitarMonto(); // Vuelve al menú de creditos
 		}
 		return; // Finaliza la función
 	}
 
-	// Función para cargar créditos a un usuario
+	// Función para cargar creditos a un usuario
 	private cargarCredito(idUsuario?:number): void {
 		try {	
 			let entrePorID = false;		
 			if (!idUsuario){
 				// Solicita el ID a el usuario
 				idUsuario = rls.questionInt(
-					"Ingrese el ID del usuario al que desea cargar crédito: "
+					"Ingrese el ID del usuario al que desea cargar credito: "
 				);
 			}else{
 				entrePorID = true;
@@ -258,8 +258,8 @@ export class Casino {
 			// Busca el usuario con el ID proporcionado
 			const usuario = this.sesiones.getUsuario(idUsuario);
             
-			// Agrega el monto a los créditos del usuario
-			usuario.setCreditos(monto); // Incrementa los créditos del usuario
+			// Agrega el monto a los creditos del usuario
+			usuario.setCreditos(monto); // Incrementa los creditos del usuario
 			console.log(
 				`¡Carga Exitosa! Se han cargado ${Util.convertirAPesosAR(monto)} al jugador ${usuario.getNombre()}.` // Muestra la confirmación
 			);
@@ -271,7 +271,7 @@ export class Casino {
 			if (entrePorID){
 				this.menuUsuarios();  // Vuelve al menú de usuarios
 			}else{
-				this.solicitarMonto(); // Vuelve al menú de créditos
+				this.solicitarMonto(); // Vuelve al menú de creditos
 			}
 		} catch (error) {
 			// Maneja errores durante el proceso
@@ -279,7 +279,7 @@ export class Casino {
 			rls.keyInPause("Presione cualquier tecla para continuar...", {
 				guide: false,
 			});
-			this.solicitarMonto(); // Vuelve al menú de créditos
+			this.solicitarMonto(); // Vuelve al menú de creditos
 		}
 	}
 
@@ -298,7 +298,7 @@ export class Casino {
 		menuJuegos.push("Volver");
 
 		let opcionJuegos: number = -1;
-		//Repite hasta que se elija la útima opción (VOLVER)
+		//Repite hasta que se elija la útima opcion (VOLVER)
 		while (opcionJuegos !== menuJuegos.length - 1) {
             try{
                 console.clear();
@@ -307,12 +307,12 @@ export class Casino {
 				console.log("║       Cargar o Retirar Monto de Dinero      ║");
 				console.log("╚═════════════════════════════════════════════╝");				
 
-                opcionJuegos = rls.keyInSelect(menuJuegos, "Opción: ", {
+                opcionJuegos = rls.keyInSelect(menuJuegos, "Opcion: ", {
                     guide: false,
                     cancel: false,
                 });
 
-                // Si no se elige la opción "Volver", inicia el juego seleccionado
+                // Si no se elige la opcion "Volver", inicia el juego seleccionado
                 if (opcionJuegos !== menuJuegos.length - 1) {
                     this.juegos[opcionJuegos].jugar(this.obtenerUsuario()); // Llama al método jugar del juego seleccionado, pasándole la sesión actual
                 }
@@ -357,7 +357,7 @@ export class Casino {
                 // Elimina al usuario con el ID especificado
                 this.sesiones.eliminarUsuarioPorId(idEliminar);
                 console.log(
-                    `¡Usuario con ID ${idEliminar} eliminado con éxito!` //Mensaje de confirmación
+                    `¡Usuario con ID ${idEliminar} eliminado con exito!` //Mensaje de confirmación
                 );
                 rls.keyInPause(
                     "Presione cualquier tecla para continuar...",
