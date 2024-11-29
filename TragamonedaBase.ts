@@ -8,7 +8,6 @@ export abstract class TragamonedaBase extends Juego {
     protected apuesta: number = 0;
     protected emojiFavorito: string = ``;
     protected creditosMinimos: number;
-    public nombreJuego: string=``;
     
     constructor(nombre: string, creditosMinimos: number) {
         super(nombre);
