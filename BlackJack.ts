@@ -48,7 +48,7 @@ export class BlackJack extends Juego {
                 case 0: //Solicita la apuesta inicial
                         this.solicitarApuesta(usuario);
                         //Reparte las cartas
-                        this.generarManoInicial(usuario);
+                        this.generarManoInicial();
                         this.juegaUsuario(usuario); 
                         break;
                 case 1: volver=true; break;
@@ -179,7 +179,7 @@ export class BlackJack extends Juego {
     }
 
     // Calcula el valor de una mano
-    private calcularMano(mano: string[]){
+    private calcularMano(mano: string[]): number{
         let valor: number = 0; // Valor acumulado
         let cantAses: number = 0; //Cantidad de Ases
         mano.forEach((carta)=>{
@@ -214,7 +214,7 @@ export class BlackJack extends Juego {
     }
 
     //Solicita al usuario que realice una apuesta
-    private solicitarApuesta(usuario: Usuario){
+    private solicitarApuesta(usuario: Usuario): void{
         let apuesta: number = rls.questionInt(`Ingrese su apuesta (Minimo: ${Util.convertirAPesosAR(CREDITOS_MINIMOS)}): `, {unmatchMessage: 'Ingrese un valor de apuesta válido.'})
         if (apuesta<CREDITOS_MINIMOS || apuesta>usuario.getCreditos()){
             throw Error('Apuesta inválida o créditos insuficientes.');
@@ -224,7 +224,7 @@ export class BlackJack extends Juego {
     }
 
     //Reparte una carta al arreglo indicado eliminandola
-    private repartirCarta(mano: string[]){
+    private repartirCarta(mano: string[]): void{
         const indice = Math.floor(Math.random() * this.maso.length);
         mano.push(this.maso[indice]);
         this.maso.splice(indice, 1);
@@ -276,7 +276,7 @@ export class BlackJack extends Juego {
     }
 
     //Genera la mano inicial (2 cartas para el jugador y la máquina)
-    private generarManoInicial(usuario: Usuario): void{
+    private generarManoInicial(): void{
         console.log(`Reparto inicial`);
         this.maso = [...MASO_INICIAL]; //Inicializo el maso        
         this.manoMaquina = [];
