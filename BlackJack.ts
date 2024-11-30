@@ -47,9 +47,11 @@ export class BlackJack extends Juego {
             switch (rls.keyInSelect(['Apostar', 'Salir del Juego'], 'Opcion: ', {guide: false, cancel: false})){
                 case 0: //Solicita la apuesta inicial
                         this.solicitarApuesta(usuario);
-                        //Reparte las cartas
-                        this.generarManoInicial();
-                        this.juegaUsuario(usuario); 
+                        if (this.apuesta!==0){
+                            //Reparte las cartas
+                            this.generarManoInicial();
+                            this.juegaUsuario(usuario); 
+                        }
                         break;
                 case 1: volver=true; break;
             }
@@ -217,10 +219,12 @@ export class BlackJack extends Juego {
     private solicitarApuesta(usuario: Usuario): void{
         let apuesta: number = rls.questionInt(`Ingrese su apuesta (Minimo: ${Util.convertirAPesosAR(CREDITOS_MINIMOS)}): `, {unmatchMessage: 'Ingrese un valor de apuesta válido.'})
         if (apuesta<CREDITOS_MINIMOS || apuesta>usuario.getCreditos()){
-            throw Error('Apuesta invalida o creditos insuficientes.');
+            console.error('Apuesta invalida o creditos insuficientes.');
+            rls.keyInPause("Presione cualquier tecla para continuar...", {guide: false,});
+        }else{
+            usuario.setCreditos(-apuesta);
+            this.apuesta = apuesta;
         }
-        usuario.setCreditos(-apuesta);
-        this.apuesta = apuesta;
     }
 
     //Reparte una carta al arreglo indicado eliminandola
