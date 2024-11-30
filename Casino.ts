@@ -208,7 +208,7 @@ export class Casino {
 			usuario?.setCreditos(-monto); // Reduce el monto en los creditos del usurio
 			
       		console.log(
-				`¡Carga Exitosa! Se han retirado ${Util.convertirAPesosAR(monto)} al jugador ${usuario.getNombre()}.` // Muestra la confirmación
+				`¡Retiro Exitoso! Se han retirado ${Util.convertirAPesosAR(monto)} al jugador ${usuario.getNombre()}.` // Muestra la confirmación
 			);
 			rls.keyInPause("Presione cualquier tecla para continuar...", {
 				guide: false,
@@ -293,9 +293,8 @@ export class Casino {
 		while (opcionJuegos !== menuJuegos.length - 1) {
             try{
                 console.clear();
-                console.clear();
                 console.log("╔═════════════════════════════════════════════╗");
-                console.log("║       Cargar o Retirar Monto de Dinero      ║");
+                console.log("║       			Juegos				       ║");
                 console.log("╚═════════════════════════════════════════════╝");				
 
                 opcionJuegos = rls.keyInSelect(menuJuegos, "Opcion: ", {
@@ -317,7 +316,7 @@ export class Casino {
 		}
 	}
 
-  // Método para obtener el ID del usuario desde la sesión
+  	// Método para obtener el ID del usuario desde la sesión
 	// Este método se adapta en función del número de usuarios disponibles
 	private obtenerUsuario(): Usuario {
 		// Si hay más de un usuariom, muestra los usuarios disponibles
