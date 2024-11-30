@@ -40,7 +40,8 @@ export class BlackJack extends Juego {
             }
 
             this.mostrarInstrucciones([{clave: '$<NOMBRE_USUARIO>', valor: usuario.getNombre()},
-                                       {clave: '$<CREDITOS>', valor: Util.convertirAPesosAR(usuario.getCreditos())}
+                                       {clave: '$<CREDITOS>', valor: Util.convertirAPesosAR(usuario.getCreditos())},
+                                       {clave: '$<NOMBRE_JUEGO>', valor: this.getNombre()}
                                       ]);
             
             // Inicialmente solo se apostar o salir
