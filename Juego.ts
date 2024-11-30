@@ -20,7 +20,7 @@ export abstract class Juego implements IJuego{
 	// Lee las instrucciones desde un archivo con el mismo nombre de la clase
 	// pero extension .ins "Ej: Juego.ins"
 	protected  mostrarInstrucciones(reemplazos?:ParValorClave[]) : void{
-		console.log(Util.leerArchivo(`./${this.constructor.name}.ins`, reemplazos));
+		console.log(Util.leerArchivo(`./assets/${this.constructor.name}.ins`, reemplazos));
 	}
 
 	/* Declara un método abstracto llamado "jugar" que debe ser implementado en las clases hijas.

@@ -71,7 +71,7 @@ export abstract class TragamonedaBase extends Juego {
                 break;
             } else {
                 console.error(
-                    `Por favor, ingresa un valor valido entre ${this.creditosMinimos} y tus craditos disponibles (${usuario.getCreditos()}).`
+                    `Por favor, ingresa un valor valido entre ${this.creditosMinimos} y tus creditos disponibles (${usuario.getCreditos()}).`
                 );
             }
         }

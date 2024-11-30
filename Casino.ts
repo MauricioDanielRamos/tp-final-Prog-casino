@@ -29,7 +29,7 @@ export class Casino {
 
 	//Muestra una guía que indica al usuario como jugar en el Casino
 	private mostrarInstrucciones(reemplazos?:ParValorClave[]) {
-		console.log(Util.leerArchivo(`${this.constructor.name}.ins`, reemplazos));
+		console.log(Util.leerArchivo(`./assets/${this.constructor.name}.ins`, reemplazos));
 	}
 
 	//Muestra el Menú Principal

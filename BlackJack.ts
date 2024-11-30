@@ -153,8 +153,8 @@ export class BlackJack extends Juego {
             usuario.setCreditos(this.apuesta) //Recupera la apuesta;
         //Se pasa la máquina
         } else if (this.calcularMano(this.manoMaquina)>21){
-        console.log(`Se paso la maquina. Gana ${usuario.getNombre()}`);
-        ganancia=this.apuesta*2; //Dobla la apuesta
+            console.log(`Se paso la maquina. Gana ${usuario.getNombre()}`);
+            ganancia=this.apuesta*2; //Dobla la apuesta
         //Empate fuera de BlackJack
         } else if (this.calcularMano(this.manoMaquina)==this.calcularMano(this.manoUsuario)){ 
               console.log(`Empate a ${this.calcularMano(this.manoMaquina)}. Recupera la apuesta.`);
