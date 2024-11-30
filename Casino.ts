@@ -294,7 +294,7 @@ export class Casino {
             try{
                 console.clear();
                 console.log("╔═════════════════════════════════════════════╗");
-                console.log("║       			Juegos				       ║");
+                console.log("║                   Juegos                    ║");
                 console.log("╚═════════════════════════════════════════════╝");				
 
                 opcionJuegos = rls.keyInSelect(menuJuegos, "Opcion: ", {

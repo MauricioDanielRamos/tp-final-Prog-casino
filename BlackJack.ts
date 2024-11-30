@@ -5,7 +5,8 @@ import * as rls from "readline-sync";
 
 // Definimos un valor mínimo de creditos para poder jugar
 const CREDITOS_MINIMOS: number = 150;
-
+const VALOR_MINIMO_MAQUINA: number = 17;
+const VALOR_BLACKJACK : number = 21;
 const MASO_INICIAL = [
     '♥2','♥3','♥4','♥5','♥6','♥7','♥8','♥9','♥10','♥J','♥Q','♥K','♥A',
     '♦2','♦3','♦4','♦5','♦6','♦7','♦8','♦9','♦10','♦J','♦Q','♦K','♦A',
@@ -119,7 +120,7 @@ export class BlackJack extends Juego {
         // Si no se rinde juega la maquina
         if(!rendirse){
             //Turno de la maquina
-            while (!sePasoDe21 && this.calcularMano(this.manoMaquina)<17){            
+            while (!sePasoDe21 && this.calcularMano(this.manoMaquina)<VALOR_MINIMO_MAQUINA){            
                 this.repartirCarta(this.manoMaquina);
                 this.mostrarMano(`Maquina (${this.calcularMano(this.manoMaquina)})`, this.manoMaquina, false);
             }        
@@ -164,8 +165,8 @@ export class BlackJack extends Juego {
               usuario.setCreditos(this.apuesta);
         // Las manos son diferentes
         } else {
-            const difManoMaquina = 21 - this.calcularMano(this.manoMaquina);
-            const difManoUsuario = 21 - this.calcularMano(this.manoUsuario);
+            const difManoMaquina = VALOR_BLACKJACK - this.calcularMano(this.manoMaquina);
+            const difManoUsuario = VALOR_BLACKJACK - this.calcularMano(this.manoUsuario);
             if (difManoUsuario<difManoMaquina){
                 console.log(`Gana ${usuario.getNombre()}`);
                 ganancia=this.apuesta*2; //Dobla la apuesta
@@ -209,7 +210,7 @@ export class BlackJack extends Juego {
 
         // Manejo los ases si los hay para llegar lo más cerca posible a 21 o no pasarme
         // Ajustar el valor de los ases si la mano se pasa de 21
-        while (valor > 21 && cantAses > 0) {
+        while (valor > VALOR_BLACKJACK && cantAses > 0) {
             valor -= 10; // Cambiar un as de 11 a 1
             cantAses--;
         }        
