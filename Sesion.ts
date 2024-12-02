@@ -57,7 +57,7 @@ export class Sesion {
 
 		this.usuarios.splice(index, 1); // Elimina al usuario del array
 
-		// Si el arreglo de usuarios esta vacio despues de eliminar todos los usuarios, el contador se resetea a 1
+		// Si el arreglo de usuarios está vacío después de eliminar todos los usuarios, el contador se resetea a 1
 		if (this.usuarios.length === 0) {
 			this.idContador = 1;
 		}

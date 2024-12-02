@@ -144,7 +144,7 @@ export class Casino {
 			// Mensaje de confirmación si se agrego correctamente
 			console.log(`Usuario "${nuevoNombre}" agregado con éxito!`);
 			// Función para cargar crédito al cargar un usuario
-			this.cargarCredito(id);
+			this.cargarCredito(id.toString());
 		} catch (error) {
 			// Maneja errores de validación
 			console.error(`${(error as Error).message}`);
@@ -205,7 +205,7 @@ export class Casino {
 		try {
 			// Solicita el ID del usuario
 			const idUsuario = rls.questionInt(
-				"Ingrese el ID del usuario del que desea retirar credito: "
+				"Ingrese el ID del usuario del que desea retirar creditos: "
 			);
 
 			// Solicita el monto a retirar
@@ -244,28 +244,74 @@ export class Casino {
 	}
 
 	// Función para cargar créditos a un usuario
-	private cargarCredito(idUsuario?: number): void {
+	private cargarCredito(idUsuario?: string): void {
 		try {
+			let idUsuarioEntero: number;
 			let entrePorID = false;
+
 			if (!idUsuario) {
-				// Solicita el ID a el usuario
-				idUsuario = rls.questionInt(
-					"Ingrese el ID del usuario al que desea cargar credito: "
-				);
+				while (true) {
+					// Solicita el ID a el usuario
+					idUsuario = rls.question(
+						"Ingrese el ID del usuario al que desea cargar credito: "
+					);
+
+					// Valida si el input es un número entero positivo
+					if (!/^\d+$/.test(idUsuario)) {
+						console.error(
+							"Error: Solamente se permiten números enteros."
+						);
+						rls.keyInPause(
+							"Presione cualquier tecla para continuar...",
+							{
+								guide: false,
+							}
+						);
+						continue; // Reintenta hasta que el usuario ingrese un número válido
+					}
+
+					// Convertimos el string ingresado por el usuario a entero
+					idUsuarioEntero = parseInt(idUsuario);
+					break; // Si hay éxito sale del bucle
+				}
 			} else {
+				idUsuarioEntero = parseInt(idUsuario);
 				entrePorID = true;
 			}
 			// Solicita el monto
-			const monto = rls.questionFloat("Ingrese el monto a cargar: ");
+			let monto: number;
 
-			// Verifica que el monto sea mayor a 0
-			if (monto <= 0) {
-				// Lanza un error si el monto es inválido
-				throw new Error("El monto debe ser mayor a cero.");
+			// Bucle mientras sea verdad
+			while (true) {
+				const input = rls.question("Ingrese el monto a cargar: ");
+
+				// Verifica si la entrada es un número válido
+				if (isNaN(Number(input))) {
+					console.error(
+						"Error: Solo se permiten números. No se permiten letras ni símbolos."
+					);
+					rls.keyInPause("Presione una tecla para continuar...", {
+						guide: false,
+					});
+					continue; // Reintenta si no es un número válido
+				}
+
+				monto = parseFloat(input);
+
+				if (monto <= 0) {
+					// Verifica que el monto sea mayor a 0
+					// Lanza un error si el monto es inválido
+					console.error("Error: El monto debe ser mayor a cero.");
+					rls.keyInPause("Presione una tecla para continuar...", {
+						guide: false,
+					});
+					continue;
+				}
+				break;
 			}
 
 			// Busca el usuario con el ID proporcionado
-			const usuario = this.sesion.getUsuario(idUsuario);
+			const usuario = this.sesion.getUsuario(idUsuarioEntero);
 
 			// Agrega el monto a los créditos del usuario
 			usuario.setCreditos(monto); // Incrementa los créditos del usuario
