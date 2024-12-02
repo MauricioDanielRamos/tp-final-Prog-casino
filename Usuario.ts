@@ -17,12 +17,16 @@ export class Usuario {
 
     public setNombre(nombre: string): void{
         // Valida el nombre ingresado por el usuario
+        if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$/.test(nombre)) {
+			throw new Error("El nombre solamente puede contener caracteres a-z, letras con acento, ñ y espacios.");
+		}
+        /* if (nombre.match(/\d/)) {
+			throw new Error("El nombre no puede contener numeros.");
+		} */
 		if (!nombre || nombre.length < 3) {
 			throw new Error("El nombre debe contener al menos 3 caracteres.");
 		}
-		if (nombre.match(/\d/)) {
-			throw new Error("El nombre no puede contener numeros.");
-		}
+		
         this.nombre = nombre;
     }
 
