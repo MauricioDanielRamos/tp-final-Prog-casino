@@ -195,11 +195,11 @@ export class Casino {
 	private retirarCredito(): void {
 		try {
 			// Si no se proporciona un ID como argumento
-			let idUsuario: number = this.solicitarID(
+			let idUsuario: number = Util.solicitarID(
 				"Ingrese el ID del usuario al que desea retirar créditos: "
 			);
 
-			let monto: number = this.solicitarMonto(
+			let monto: number = Util.solicitarMonto(
 				"Ingrese el monto a retirar: "
 			);
 
@@ -233,60 +233,6 @@ export class Casino {
 		return; // Finaliza la ejecución de la función
 	}
 
-	private solicitarID(mensaje: string): number {
-		while (true) {
-			// Solicita el ID al usuario
-			const input = rls.question(mensaje);
-
-			// Valida que el ID sea un número entero positivo
-			if (!/^\d+$/.test(input)) {
-				console.error("Error: Solamente se permiten números enteros.");
-				rls.keyInPause("Presione cualquier tecla para continuar...", {
-					guide: false,
-				});
-				continue; // Repite el ciclo hasta que se proporcione un ID válido
-			}
-
-			// Convierte el ID ingresado a número entero
-			return parseInt(input);
-		}
-	}
-
-	private solicitarMonto(mensaje: string): number {
-		let monto: number;
-		while (true) {
-			// Solicita el monto que desea cargar
-			const input = rls.question(mensaje).trim();
-
-			if (input === "") {
-				console.error("Error: El monto no puede estar vacío");
-				rls.keyInPause("Presione cualquier tecla para continuar...", {
-					guide: false,
-				});
-				continue;
-			} else if (isNaN(Number(input))) {
-				// Valida que el monto sea un número válido
-				console.error(
-					"Error: El monto solamente debe contener números"
-				);
-				rls.keyInPause("Presione cualquier tecla para continuar...", {
-					guide: false,
-				});
-				continue;
-			}
-			// Valida que el monto sea mayor a 0
-			else if (parseFloat(input) <= 0) {
-				console.error("Error: El monto debe ser mayor a 0");
-				rls.keyInPause("Presione cualquier tecla para continuar...", {
-					guide: false,
-				});
-				continue; // Repite el ciclo si el monto no es positivo
-			}
-			// Convierte el monto ingresado a número flotante
-			return (monto = parseFloat(input));
-		}
-	}
-
 	// Función para cargar créditos a un usuario
 	private cargarCredito(idUsuario?: number): void {
 		try {
@@ -294,7 +240,7 @@ export class Casino {
 
 			if (!idUsuario) {
 				// Si no se proporciona un ID como argumento
-				idUsuario = this.solicitarID(
+				idUsuario = Util.solicitarID(
 					"Ingrese el ID del usuario al que desea cargar créditos: "
 				);
 			} else {
@@ -302,7 +248,7 @@ export class Casino {
 				entrePorID = true; // Indica que la función fue llamada con un ID predefinido
 
 			}
-			let monto: number = this.solicitarMonto(
+			let monto: number = Util.solicitarMonto(
 				"Ingrese el monto a cargar: "
 			);
 			// Busca al usuario con el ID proporcionado
@@ -388,7 +334,7 @@ export class Casino {
 		console.log("Usuarios disponibles:");
 		this.sesion.imprimirListadoUsuarios();
 		// Solicita el ID a el usuario
-		const idUsuario = this.solicitarID("Ingrese el ID del usuario: ");
+		const idUsuario = Util.solicitarID("Ingrese el ID del usuario: ");
 		return this.sesion.getUsuario(idUsuario);
 	}
 	// Eliminar un usuario
@@ -398,7 +344,7 @@ export class Casino {
 			if (this.sesion.getCantUsuarios() > 0) {
 				try {
 					// Solicita el ID del usuario
-					const idEliminar = this.solicitarID(
+					const idEliminar = Util.solicitarID(
 						"Ingrese el ID de usuario a eliminar: "
 					);
 					// Elimina al usuario con el ID especificado

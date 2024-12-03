@@ -243,7 +243,7 @@ export class BlackJack extends Juego {
 
     //Solicita al usuario que realice una apuesta
     private solicitarApuesta(usuario: Usuario): void{
-        let apuesta: number = rls.questionInt(`Ingrese su apuesta (Minimo: ${Util.convertirAPesosAR(CREDITOS_MINIMOS)}): `, {unmatchMessage: 'Ingrese un valor de apuesta válido.'})
+        let apuesta: number = Util.solicitarMonto(`Ingrese su apuesta (Minimo: ${Util.convertirAPesosAR(CREDITOS_MINIMOS)}): `);
         if (apuesta<CREDITOS_MINIMOS || apuesta>usuario.getCreditos()){
             console.error('Apuesta invalida o creditos insuficientes.');
             rls.keyInPause("Presione cualquier tecla para continuar...", {guide: false,});
