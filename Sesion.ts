@@ -12,63 +12,51 @@ export class Sesion {
 	}
 
 	// Busca el usuario con el ID proporcionado
-	public getUsuario(id: number): Usuario {
+	public getUsuario(id: number): Usuario{
 		const usuario = this.usuarios.find((u) => u.getId() === id);
 
 		// Verificar si el usuario existe
 		if (!usuario) {
-			throw new Error(`No se encontró un usuario con el ID ${id}.`);
+			throw new Error(
+				`No se encontro un usuario con el ID ${id}.`
+			);
 		}
 		return usuario;
-	}
+	}		
 
 	// Retorna la cantidad de usuarios cargados
-	public getCantUsuarios(): number {
+	public getCantUsuarios(): number{
 		return this.usuarios.length;
 	}
 
 	// Imprime el listado de usuarios
-	public imprimirListadoUsuarios(): void {
+	public imprimirListadoUsuarios(): void{
 		this.usuarios.forEach((usuario) => {
-			console.log(
-				`  ID: ${usuario.getId()} - Nombre: ${usuario.getNombre()} - Creditos: ${Util.convertirAPesosAR(
-					usuario.getCreditos()
-				)}`
-			);
+			console.log(`  ID: ${usuario.getId()} - Nombre: ${usuario.getNombre()} - Creditos: ${Util.convertirAPesosAR(usuario.getCreditos())}`)
 		});
 	}
 
 	// Agrega un usuario nuevo con ID único y creditos iniciales
 	public agregarUsuario(nombre: string): number {
-		const usuario = new Usuario(this.idContador, nombre, 0);
-		const ultimo = this.usuarios.push(usuario) - 1; // Agrega un nuevo Usuario
+		const usuario = new Usuario(this.idContador, nombre, 0)
+		const ultimo = this.usuarios.push(usuario)-1; // Agrega un nuevo Usuario
 		this.idContador++;
 		return this.usuarios[ultimo].getId();
 	}
 
 	// Elimina un usuario utilizando el ID
 	public eliminarUsuarioPorId(id: number): void {
-		const index = this.usuarios.findIndex(
-			(usuario) => usuario.getId() === id
-		);
+		const index = this.usuarios.findIndex((usuario) => usuario.getId() === id);
 		if (index === -1) {
 			throw new Error(`No se encontro ningun usuario con el ID ${id}.`);
 		}
-
 		this.usuarios.splice(index, 1); // Elimina al usuario del array
-
-		// Si el arreglo de usuarios esta vacio despues de eliminar todos los usuarios, el contador se resetea a 1
-		if (this.usuarios.length === 0) {
-			this.idContador = 1;
-		}
 	}
 
 	// Retorna la cantidad de créditos cargados en la sesión
 	public getCreditosSesiones(): number {
 		let monto: number = 0;
-		this.usuarios
-			.flatMap((usuario) => usuario.getCreditos())
-			.forEach((montoUsuario) => (monto += montoUsuario));
+		this.usuarios.flatMap(usuario=>usuario.getCreditos()).forEach(montoUsuario=>monto+=montoUsuario);
 		return monto;
 	}
 
@@ -78,6 +66,6 @@ export class Sesion {
 		if (!usuario) {
 			throw new Error(`No se encontro un usuario con el ID ${id}.`);
 		}
-		usuario.setCreditos(usuario.getCreditos() + monto);
+		usuario.setCreditos(usuario.getCreditos()+monto);
 	}
 }
