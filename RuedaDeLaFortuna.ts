@@ -3,24 +3,26 @@ import { Juego } from "./Juego";
 import { Usuario } from "./Usuario";
 import { Util } from "./Util";
 
+const CREDITOS_MINIMOS: number = 1000;
+const PREMIOS: string[] = [
+	// Premios de la rueda de la fortuna
+	"¡Perdiste!",
+	"¡Un Automovil 0km!",
+	"¡Perdiste!",
+	"¡Una Moto 250cc ENDURO!",
+	"¡Perdiste!",
+	"¡Perdiste!",
+	"¡Perdiste!",
+	"¡Un Viaje a Brasil!",
+	"100",
+	"200",
+	"500",
+	"900",
+];
+
 // Clase Rueda de la fortuna
 export class RuedaDeLaFortuna extends Juego {
-	private premios: string[] = [
-		// Premios de la rueda de la fortuna
-		"¡Perdiste!",
-		"¡Un Automovil 0km!",
-		"¡Perdiste!",
-		"¡Una Moto 250cc ENDURO!",
-		"¡Perdiste!",
-		"¡Perdiste!",
-		"¡Perdiste!",
-		"¡Un Viaje a Brasil!",
-		"100",
-		"200",
-		"500",
-		"900",
-	];
-	private creditosMinimos = 1000; // Valor minimo de la tirada
+	private premios: string[] = PREMIOS;
 
 	// Constructor
 	constructor(nombre: string) {
@@ -56,12 +58,12 @@ export class RuedaDeLaFortuna extends Juego {
 		}
 
 		// Verifica si el usuario tiene suficientos creditos pira jugar
-		if (usuario.getCreditos() < this.creditosMinimos) {
+		if (usuario.getCreditos() < CREDITOS_MINIMOS) {
 			//Muestra los creditos actuales
 			this.mostrarCreditos(usuario);
 			console.log(
 				`No tienes suficientes creditos para jugar. Los creditos minimos para este juego son: ${Util.convertirAPesosAR(
-					this.creditosMinimos
+					CREDITOS_MINIMOS
 				)} `
 			);
 			// Pausa para que el usuario lea el mensaje antes de continuar
@@ -90,7 +92,7 @@ export class RuedaDeLaFortuna extends Juego {
 	// Funcion para manejar la lógica de la tirada del juego
 	private realizarTirada(usuario: Usuario): void {
 		// Verifica si el usuario tiene suficientes creditos pira realizar una tirada
-		if (usuario.getCreditos() < this.creditosMinimos) {
+		if (usuario.getCreditos() < CREDITOS_MINIMOS) {
 			console.log("\No tienes mas creditos pira realizar una tirada.");
 			// Pausa para que el usuario lea el mensaje antes de continuar
 			rls.keyInPause("Presione una tecla para continuar", {
@@ -115,7 +117,7 @@ export class RuedaDeLaFortuna extends Juego {
 		// Si el usuario elige "Sí" (elección 0)
 		if (eleccion === 0) {
 			// Verifica nuevamente si el usuario tiene los creditos sificientes antes de continuar
-			if (usuario.getCreditos() < this.creditosMinimos) {
+			if (usuario.getCreditos() < CREDITOS_MINIMOS) {
 				console.log(
 					`Error: Creditos insuficientes para realizar la tirada. Tienes ${usuario.getCreditos()} Creditos`
 			);
@@ -126,7 +128,7 @@ export class RuedaDeLaFortuna extends Juego {
 				return;
 			} else {
 				// Si el usuario tiene creditos sificientes, se le descuentan los creditos pir la tirada
-				usuario.setCreditos(-this.creditosMinimos);
+				usuario.setCreditos(-CREDITOS_MINIMOS);
 				// Limpia la consola para mostrar el resultado
 				console.clear();
 				console.log("\Girando la rueda...");
@@ -155,7 +157,7 @@ export class RuedaDeLaFortuna extends Juego {
 				this.mostrarCreditos(usuario);
 
 				// Verificar si el usuario tiene suficientes creditos pira seguir jugando
-				if (usuario.getCreditos() < this.creditosMinimos) {
+				if (usuario.getCreditos() < CREDITOS_MINIMOS) {
 					console.log(
 						"\No tienes suficientes creditos pira realizar otra tirada."
 					);
