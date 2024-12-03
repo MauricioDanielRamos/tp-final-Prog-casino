@@ -109,9 +109,16 @@ export class Casino {
 			});
 			
 			switch (opcion) {
-				case 0: this.agregarUsuario(); opcion=3; break;
-				case 1: this.eliminarUsuario(); break;
-				case 2: this.solicitarMonto(); break;
+				case 0:
+					this.agregarUsuario();
+					opcion = 3;
+					break;
+				case 1:
+					this.eliminarUsuario();
+					break;
+				case 2:
+					this.menuSolicitarMonto();
+					break;
 			}
 		}
 	}
@@ -141,7 +148,7 @@ export class Casino {
     }
     
 	// Función para solicitar el monto de credito o retiro
-	private solicitarMonto(): void {
+	private menuSolicitarMonto(): void {
 		console.clear();
 		console.log("╔═════════════════════════════════════════════╗");
 		console.log("║       Cargar o Retirar Monto de Dinero      ║");
@@ -187,93 +194,151 @@ export class Casino {
 	// Función para retirar crédito de un usuario
 	private retirarCredito(): void {
 		try {
-			// Solicita el ID del usuario
-			const idUsuario = rls.questionInt(
-				"Ingrese el ID del usuario del que desea retirar credito: "
+			// Si no se proporciona un ID como argumento
+			let idUsuario: number = this.solicitarID(
+				"Ingrese el ID del usuario al que desea retirar créditos: "
 			);
 
-			// Solicita el monto a retirar
-			const monto = rls.questionFloat("Ingrese el monto a retirar: ");
-
-			// Verifica que el monto sea mayor a 0
-			if (monto <= 0) {
-				// Lanza un error si el monto es inválido
-				throw new Error("El monto debe ser mayor a cero.");
-			}
+			let monto: number = this.solicitarMonto(
+				"Ingrese el monto a retirar: "
+			);
 
 			// Busca al usuario con el ID proporcionado
 			const usuario = this.sesion.getUsuario(idUsuario);
       
-      		// Realiza el retiro de crédito utilizando el metedo setCreditos
-			usuario?.setCreditos(-monto); // Reduce el monto en los creditos del usurio
-			
-      		console.log(
-				`¡Retiro Exitoso! Se han retirado ${Util.convertirAPesosAR(monto)} al jugador ${usuario.getNombre()}.` // Muestra la confirmación
+			// Si el usuario es encontrado, realiza el retiro de crédito
+			usuario?.setCreditos(-monto); // Aplica el retiro usando un monto negativo
+
+			console.log(
+				`¡Retiro Exitoso! Se han retirado ${Util.convertirAPesosAR(
+					monto
+				)} al jugador ${usuario.getNombre()}.` // Proporciona una confirmación al usuario
 			);
 			rls.keyInPause("Presione cualquier tecla para continuar...", {
 				guide: false,
 			});
-			this.solicitarMonto(); // Vuelve al menú de créditos
+
+			// Regresa al menú principal de créditos después de completar el retiro
+			this.menuSolicitarMonto();
 		} catch (error) {
-			// Maneja errores durante el proceso
+			// Maneja cualquier error que ocurra en el proceso
 			console.error(`${(error as Error).message}`);
 			rls.keyInPause("Presione cualquier tecla para continuar...", {
 				guide: false,
 			});
-			this.solicitarMonto(); // Vuelve al menú de créditos
+
+			// Redirige al menú de créditos en caso de error
+			this.menuSolicitarMonto();
 		}
-		return; // Finaliza la función
+		return; // Finaliza la ejecución de la función
+	}
+
+	private solicitarID(mensaje: string): number {
+		while (true) {
+			// Solicita el ID al usuario
+			const input = rls.question(mensaje);
+
+			// Valida que el ID sea un número entero positivo
+			if (!/^\d+$/.test(input)) {
+				console.error("Error: Solamente se permiten números enteros.");
+				rls.keyInPause("Presione cualquier tecla para continuar...", {
+					guide: false,
+				});
+				continue; // Repite el ciclo hasta que se proporcione un ID válido
+			}
+
+			// Convierte el ID ingresado a número entero
+			return parseInt(input);
+		}
+	}
+
+	private solicitarMonto(mensaje: string): number {
+		let monto: number;
+		while (true) {
+			// Solicita el monto que desea cargar
+			const input = rls.question(mensaje).trim();
+
+			if (input === "") {
+				console.error("Error: El monto no puede estar vacío");
+				rls.keyInPause("Presione cualquier tecla para continuar...", {
+					guide: false,
+				});
+				continue;
+			} else if (isNaN(Number(input))) {
+				// Valida que el monto sea un número válido
+				console.error(
+					"Error: El monto solamente debe contener números"
+				);
+				rls.keyInPause("Presione cualquier tecla para continuar...", {
+					guide: false,
+				});
+				continue;
+			}
+			// Valida que el monto sea mayor a 0
+			else if (parseFloat(input) <= 0) {
+				console.error("Error: El monto debe ser mayor a 0");
+				rls.keyInPause("Presione cualquier tecla para continuar...", {
+					guide: false,
+				});
+				continue; // Repite el ciclo si el monto no es positivo
+			}
+			// Convierte el monto ingresado a número flotante
+			return (monto = parseFloat(input));
+		}
 	}
 
 	// Función para cargar créditos a un usuario
-	private cargarCredito(idUsuario?:number): void {
-		try {	
-			let entrePorID = false;		
-			if (!idUsuario){
-				// Solicita el ID a el usuario
-				idUsuario = rls.questionInt(
-					"Ingrese el ID del usuario al que desea cargar credito: "
+	private cargarCredito(idUsuario?: number): void {
+		try {
+			let entrePorID = false; // Bandera para determinar si la función fue llamada con un ID directo
+
+			if (!idUsuario) {
+				// Si no se proporciona un ID como argumento
+				idUsuario = this.solicitarID(
+					"Ingrese el ID del usuario al que desea cargar créditos: "
 				);
-			}else{
-				entrePorID = true;
-			}
-			// Solicita el monto
-			const monto = rls.questionFloat("Ingrese el monto a cargar: ");
+			} else {
+				// Si se pasa un ID como parámetro, lo convierte directamente a número entero
+				entrePorID = true; // Indica que la función fue llamada con un ID predefinido
 
-			// Verifica que el monto sea mayor a 0
-			if (monto <= 0) {
-				// Lanza un error si el monto es inválido
-				throw new Error("El monto debe ser mayor a cero.");
 			}
-
-			// Busca el usuario con el ID proporcionado
+			let monto: number = this.solicitarMonto(
+				"Ingrese el monto a cargar: "
+			);
+			// Busca al usuario con el ID proporcionado
 			const usuario = this.sesion.getUsuario(idUsuario);
-            
-			// Agrega el monto a los créditos del usuario
+			// Si no se encuentra un usuario con el ID, lanza un error
+			if (!usuario) {
+				throw new Error(
+					`No se encontró un usuario con el ID ${idUsuario}.`
+				);
+			}
+			// Carga el monto al crédito del usuario
 			usuario.setCreditos(monto); // Incrementa los créditos del usuario
 			console.log(
-				`¡Carga Exitosa! Se han cargado ${Util.convertirAPesosAR(monto)} al jugador ${usuario.getNombre()}.` // Muestra la confirmación
+				`¡Carga Exitosa! Se han cargado ${Util.convertirAPesosAR(
+					monto
+				)} al jugador ${usuario.getNombre()}.` // Confirma la operación con un mensaje
 			);
 			rls.keyInPause("Presione cualquier tecla para continuar...", {
 				guide: false,
 			});
-
-			//Dependiendo de como se llamo la función es al menú que vuelve
-			if (entrePorID){
-				this.menuUsuarios();  // Vuelve al menú de usuarios
-			}else{
-			  this.solicitarMonto(); // Vuelve al menú de créditos
+			// Dependiendo de cómo se llamó la función, regresa a un menú diferente
+			if (entrePorID) {
+				this.menuUsuarios(); // Si se llamó con un ID predefinido, regresa al menú de usuarios
+			} else {
+				this.menuSolicitarMonto(); // Si no, regresa al menú de créditos
 			}
 		} catch (error) {
-			// Maneja errores durante el proceso
+			// Captura y maneja cualquier error que ocurra en el proceso
 			console.error(`${(error as Error).message}`);
 			rls.keyInPause("Presione cualquier tecla para continuar...", {
 				guide: false,
 			});
-			this.solicitarMonto(); // Vuelve al menú de créditos
+			// En caso de error, regresa al menú de créditos
+			this.menuSolicitarMonto();
 		}
 	}
-
 	/* 
         Muestra un menú generado dinámicamente con los nombres del arreglo de juegos
         y ejecuta el juego seleccionado o vuelve al menú anterior de acuerdo a la 
@@ -322,52 +387,52 @@ export class Casino {
 		// Si hay más de un usuariom, muestra los usuarios disponibles
 		console.log("Usuarios disponibles:");
 		this.sesion.imprimirListadoUsuarios();
-
-        // Solicita el ID a el usuario
-        const idUsuario = rls.questionInt(
-            "Ingrese el ID del usuario: "
-        );
-		
-		return this.sesion.getUsuario(idUsuario);		
+		// Solicita el ID a el usuario
+		const idUsuario = this.solicitarID("Ingrese el ID del usuario: ");
+		return this.sesion.getUsuario(idUsuario);
 	}
-
-    // Eliminar un usuario
-    private eliminarUsuario(): void{
-        // Verifica que haya usuarios para eliminar
-        if (this.sesion.getCantUsuarios() > 0) {
-            try {
-                // Solicita el ID del usuario
-                const idEliminar = rls.questionInt(
-                    "Ingrese el ID del usuario a eliminar: "
-                );
-
-                // Elimina al usuario con el ID especificado
-                this.sesion.eliminarUsuarioPorId(idEliminar);
-                console.log(
-                    `¡Usuario con ID ${idEliminar} eliminado con exito!` //Mensaje de confirmación
-                );
-                rls.keyInPause(
-                    "Presione cualquier tecla para continuar...",
-                    { guide: false }
-                );
-            } catch (error) {
-                // Maneja errores en la eliminación
-                console.error(`${(error as Error).message}`);
-                rls.keyInPause(
-                    "Presione cualquier tecla para continuar...",
-                    { guide: false }
-                );
-            }
-        } else {
-            // Mensaje si no hay usuarios para eliminar
-			console.error(
-				// Muestra mensaje si no hay usuarios registrados
-				"No hay usuarios registrados. Agregue un usuario primero."
-			);
-            rls.keyInPause(
-                "Presione cualquier tecla para continuar...",
-                { guide: false }
-            );
-        }
-    }
+	// Eliminar un usuario
+	private eliminarUsuario(): void {
+		// Verifica que haya usuarios para eliminar
+		while (true) {
+			if (this.sesion.getCantUsuarios() > 0) {
+				try {
+					// Solicita el ID del usuario
+					const idEliminar = this.solicitarID(
+						"Ingrese el ID de usuario a eliminar: "
+					);
+					// Elimina al usuario con el ID especificado
+					this.sesion.eliminarUsuarioPorId(idEliminar);
+					console.log(
+						`¡Usuario con ID ${idEliminar} eliminado con exito!` //Mensaje de confirmación
+					);
+					rls.keyInPause(
+						"Presione cualquier tecla para continuar...",
+						{
+							guide: false,
+						}
+					);
+					break; // Sale del bucle si hay éxito
+				} catch (error) {
+					// Maneja errores en la eliminación
+					console.error(`${(error as Error).message}`);
+					rls.keyInPause(
+						"Presione cualquier tecla para continuar...",
+						{
+							guide: false,
+						}
+					);
+				}
+			} else {
+				// Mensaje si no hay usuarios para eliminar
+				console.error(
+					// Muestra mensaje si no hay usuarios registrados
+					"No hay usuarios registrados. Agregue un usuario primero."
+				);
+				rls.keyInPause("Presione cualquier tecla para continuar...", {
+					guide: false,
+				});
+			}
+		}
+	}
 }
