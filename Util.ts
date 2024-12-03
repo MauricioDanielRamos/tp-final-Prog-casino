@@ -27,4 +27,60 @@ export class Util {
     public static convertirAPesosAR(creditos: number): string{
         return `$ ${creditos.toLocaleString("es-AR", {minimumFractionDigits: 2,maximumFractionDigits: 2,})} ARS`;
     }
+
+    // Solicita un ID por teclado 
+	public static solicitarID(mensaje: string): number {
+		while (true) {
+			// Solicita el ID al usuario
+			const input = rls.question(mensaje);
+
+			// Valida que el ID sea un número entero positivo
+			if (!/^\d+$/.test(input)) {
+				console.error("Error: Solamente se permiten números enteros.");
+				rls.keyInPause("Presione cualquier tecla para continuar...", {
+					guide: false,
+				});
+				continue; // Repite el ciclo hasta que se proporcione un ID válido
+			}
+
+			// Convierte el ID ingresado a número entero
+			return parseInt(input);
+		}
+	}
+
+    //Solicita un monto por teclado y lo retorna
+	public static solicitarMonto(mensaje: string): number {
+		let monto: number;
+		while (true) {
+			// Solicita el monto que desea cargar
+			const input = rls.question(mensaje).trim();
+
+			if (input === "") {
+				console.error("Error: El monto no puede estar vacío");
+				rls.keyInPause("Presione cualquier tecla para continuar...", {
+					guide: false,
+				});
+				continue;
+			} else if (isNaN(Number(input))) {
+				// Valida que el monto sea un número válido
+				console.error(
+					"Error: El monto solamente debe contener números"
+				);
+				rls.keyInPause("Presione cualquier tecla para continuar...", {
+					guide: false,
+				});
+				continue;
+			}
+			// Valida que el monto sea mayor a 0
+			else if (parseFloat(input) <= 0) {
+				console.error("Error: El monto debe ser mayor a 0");
+				rls.keyInPause("Presione cualquier tecla para continuar...", {
+					guide: false,
+				});
+				continue; // Repite el ciclo si el monto no es positivo
+			}
+			// Convierte el monto ingresado a número flotante
+			return (monto = parseFloat(input));
+		}
+	}
 }
