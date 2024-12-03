@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@types/node": "^22.9.3",
+    "@types/node": "^22.10.1",
     "fs": "^0.0.1-security",
     "readline-sync": "^1.4.10"
   },
