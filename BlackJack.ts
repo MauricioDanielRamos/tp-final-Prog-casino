@@ -1,4 +1,3 @@
-import { TLSSocket } from "tls";
 import { Juego } from "./Juego";
 import { Usuario } from "./Usuario";
 import { Util } from "./Util"
@@ -170,7 +169,7 @@ export class BlackJack extends Juego {
                 console.log(`Empate de Black Jack. Recupera la apuesta.`);
                 usuario.setCreditos(this.apuesta) //Recupera la apuesta;
             //Empate fuera de BlackJack
-            } else if (this.calcularMano(this.manoMaquina)==this.calcularMano(this.manoUsuario)){ 
+            } else { 
                 console.log(`Empate a ${this.calcularMano(this.manoMaquina)}. Recupera la apuesta.`);
                 usuario.setCreditos(this.apuesta);
             }
