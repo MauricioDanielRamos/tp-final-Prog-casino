@@ -48,6 +48,15 @@ export class RuedaDeLaFortuna extends Juego {
 
 	// Función principal para iniciar el juego
 	public jugar(usuario: Usuario): void {
+		this.mostrarInstrucciones([
+			{ clave: "$<NOMBRE_USUARIO>", valor: usuario.getNombre() },
+			{
+				clave: "$<CREDITOS>",
+				valor: Util.convertirAPesosAR(usuario.getCreditos()),
+			},
+			{ clave: "$<NOMBRE_JUEGO>", valor: this.getNombre() },
+		]);
+
 		// Verifica si el usurio está definido, si no lo está, muestra un error
 		if (!usuario) {
 			console.log("Error: Usuario no definido.");
@@ -75,12 +84,8 @@ export class RuedaDeLaFortuna extends Juego {
 		}
 
 		// Limpia la consola y da la bienvenida al usuario
-		console.clear();
-		console.log(
-			`\Bienvenido/a ${usuario.getNombre()} a la ${this.getNombre()}`
-		);
 		// Muestra los premios posibles
-		console.log("\Premios posibles:");
+		console.log("Premios posibles:");
 		this.premios.forEach((premio, index) =>
 			console.log(`${index + 1}. ${premio}`)
 		);
@@ -93,7 +98,7 @@ export class RuedaDeLaFortuna extends Juego {
 	private realizarTirada(usuario: Usuario): void {
 		// Verifica si el usuario tiene suficientes creditos pira realizar una tirada
 		if (usuario.getCreditos() < CREDITOS_MINIMOS) {
-			console.log("\No tienes mas creditos pira realizar una tirada.");
+			console.log("No tienes mas creditos pira realizar una tirada.");
 			// Pausa para que el usuario lea el mensaje antes de continuar
 			rls.keyInPause("Presione una tecla para continuar", {
 				guide: false,
@@ -120,7 +125,7 @@ export class RuedaDeLaFortuna extends Juego {
 			if (usuario.getCreditos() < CREDITOS_MINIMOS) {
 				console.log(
 					`Error: Creditos insuficientes para realizar la tirada. Tienes ${usuario.getCreditos()} Creditos`
-			);
+				);
 				// Pausa antes de finalizar
 				rls.keyInPause("Presione una tecla para continuar", {
 					guide: false,
@@ -131,7 +136,7 @@ export class RuedaDeLaFortuna extends Juego {
 				usuario.setCreditos(-CREDITOS_MINIMOS);
 				// Limpia la consola para mostrar el resultado
 				console.clear();
-				console.log("\Girando la rueda...");
+				console.log("Girando la rueda...");
 
 				// Obtiene el resultado de la rueda
 				const resultado = this.obtenerResultado();
@@ -147,7 +152,8 @@ export class RuedaDeLaFortuna extends Juego {
 					console.log(
 						`¡Felicitaciones! Ganaste ${Util.convertirAPesosAR(
 							premio
-						)} en creditos.`);
+						)} en creditos.`
+					);
 				} else {
 					// Si el resultado es un premio en texto, muestra el premio
 					console.log(`¡Felicitaciones! Ganaste: ${resultado}`);
@@ -159,7 +165,7 @@ export class RuedaDeLaFortuna extends Juego {
 				// Verificar si el usuario tiene suficientes creditos pira seguir jugando
 				if (usuario.getCreditos() < CREDITOS_MINIMOS) {
 					console.log(
-						"\No tienes suficientes creditos pira realizar otra tirada."
+						"No tienes suficientes creditos pira realizar otra tirada."
 					);
 					// Pausa antes de finalizar
 					rls.keyInPause("Presione una tecla para continuar", {
@@ -171,7 +177,7 @@ export class RuedaDeLaFortuna extends Juego {
 				// Preguntar si desea seguir jugando
 				const continuar = rls.keyInSelect(
 					opciones,
-					"¿Desea seguir jugando?",
+					"¿Desea seguir jugando? ",
 					{ cancel: false, guide: false }
 				);
 				// Si el usuario elige "Si", se realiza otra tirada
@@ -179,7 +185,7 @@ export class RuedaDeLaFortuna extends Juego {
 					this.realizarTirada(usuario); // Llamada recursiva para otra tirada
 				} else {
 					// Si el usuario elige "No", termina el juego
-					console.log("\Gracias por jugar. ¡Hasta la proxima!");
+					console.log("Gracias por jugar. ¡Hasta la proxima!");
 					// Pausa antes de finalizar
 					rls.keyInPause("Presione una tecla para continuar", {
 						guide: false,
@@ -188,7 +194,7 @@ export class RuedaDeLaFortuna extends Juego {
 			}
 		} else {
 			// Si el usuario elige "No", termina el juego
-			console.log("\Gracias por jugar. ¡Hasta la proxima!");
+			console.log("Gracias por jugar. ¡Hasta la proxima!");
 		}
 	}
 }
