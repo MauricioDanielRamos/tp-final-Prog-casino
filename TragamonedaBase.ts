@@ -1,5 +1,6 @@
 import { Juego } from "./Juego";
 import { Usuario } from "./Usuario";
+import { Util } from "./Util";
 import * as rls from "readline-sync";
 
 // Clase base para Tragamoneda
@@ -23,13 +24,10 @@ export abstract class TragamonedaBase extends Juego {
             throw new Error(`Error: Creditos insuficientes.`);
         }
 
-        console.log(`Bienvenido ${usuario.getNombre()} al juego de ${this.getNombre()}`);
-        console.log(
-            `Creditos actuales: ${usuario.getCreditos().toLocaleString(`es-AR`, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-            })}`
-        );
+        this.mostrarInstrucciones([{clave: '$<NOMBRE_USUARIO>', valor: usuario.getNombre()},
+            {clave: '$<CREDITOS>', valor: Util.convertirAPesosAR(usuario.getCreditos())},
+            {clave: '$<NOMBRE_JUEGO>', valor: this.getNombre()}
+        ]);
 
         while (true) {
             console.log(` Estas listo para comenzar el juego?`);
