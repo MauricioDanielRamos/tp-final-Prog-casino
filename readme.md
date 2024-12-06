@@ -14,3 +14,6 @@ Generar el UML (diagrama de clases) correspondiente al programa que van a desarr
 
 ## EXTRA
 * Leer las instrucciones de cada juego mediante un archivo txt.
+
+## Diagrama UML
+https://app.diagrams.net/#G1g2-7-ZDsEAEX__SFFyoopJNrcz0npbEy#%7B%22pageId%22%3A%221CLDDZlBlvMlnlOKafzH%22%7D
