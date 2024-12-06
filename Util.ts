@@ -33,14 +33,32 @@ export class Util {
 		while (true) {
 			// Solicita el ID al usuario
 			const input = rls.question(mensaje);
-
-			// Valida que el ID sea un número entero positivo
-			if (!/^\d+$/.test(input)) {
-				console.error("Error: Solamente se permiten números enteros.");
+			if (input === "") {
+				console.error("Error: El ID no puede estar vacío");
 				rls.keyInPause("Presione cualquier tecla para continuar...", {
 					guide: false,
 				});
-				continue; // Repite el ciclo hasta que se proporcione un ID válido
+				continue;
+			}/* else if (!/^\s+/.test(input)) {	
+				console.error("Error: El ID no puede comenzar con espacios");
+				rls.keyInPause("Presione cualquier tecla para continuar...", {
+					guide: false,
+				});
+				continue;
+			} */
+			else if (/^0+/.test((input))) {	
+				console.error("Error: El ID no puede ser 0 o comenzar con 0");
+				rls.keyInPause("Presione cualquier tecla para continuar...", {
+					guide: false,
+				});
+				continue;
+			}else if (!/^\d+$/.test(input)) {			// Valida que el ID sea un número entero positivo
+					console.error("Error: Solamente se permiten números enteros.");
+					rls.keyInPause("Presione cualquier tecla para continuar...", {
+						guide: false,
+					});
+					continue; // Repite el ciclo hasta que se proporcione un ID válido
+				
 			}
 
 			// Convierte el ID ingresado a número entero

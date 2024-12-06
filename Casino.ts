@@ -144,6 +144,7 @@ export class Casino {
                 "Presione cualquier tecla para continuar...",
                 { guide: false, cancel: false }
             );
+			this.agregarUsuario();
         }
     }
     
@@ -199,13 +200,15 @@ export class Casino {
 				"Ingrese el ID del usuario al que desea retirar créditos: "
 			);
 
+
+
+			// Busca al usuario con el ID proporcionado
+			const usuario = this.sesion.getUsuario(idUsuario);
+
 			let monto: number = Util.solicitarMonto(
 				"Ingrese el monto a retirar: "
 			);
 
-			// Busca al usuario con el ID proporcionado
-			const usuario = this.sesion.getUsuario(idUsuario);
-      
 			// Si el usuario es encontrado, realiza el retiro de crédito
 			usuario?.setCreditos(-monto); // Aplica el retiro usando un monto negativo
 
@@ -244,21 +247,21 @@ export class Casino {
 					"Ingrese el ID del usuario al que desea cargar créditos: "
 				);
 			} else {
-				// Si se pasa un ID como parámetro, lo convierte directamente a número entero
-				entrePorID = true; // Indica que la función fue llamada con un ID predefinido
+					entrePorID = true;  // Indica que la función fue llamada con un ID predefinido
+			} 
 
+			// Busca al usuario con el ID proporcionado
+			const usuario = this.sesion.getUsuario(idUsuario);
+			
+			// Si no se encuentra un usuario con el ID, lanza un error
+			if (!usuario) {
+				throw new Error(
+					`No se encontró un usuario con el ID ${idUsuario}.` 
+				);
 			}
 			let monto: number = Util.solicitarMonto(
 				"Ingrese el monto a cargar: "
 			);
-			// Busca al usuario con el ID proporcionado
-			const usuario = this.sesion.getUsuario(idUsuario);
-			// Si no se encuentra un usuario con el ID, lanza un error
-			if (!usuario) {
-				throw new Error(
-					`No se encontró un usuario con el ID ${idUsuario}.`
-				);
-			}
 			// Carga el monto al crédito del usuario
 			usuario.setCreditos(monto); // Incrementa los créditos del usuario
 			console.log(
