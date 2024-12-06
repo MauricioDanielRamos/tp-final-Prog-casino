@@ -39,21 +39,8 @@ export class Util {
 					guide: false,
 				});
 				continue;
-			}/* else if (!/^\s+/.test(input)) {	
-				console.error("Error: El ID no puede comenzar con espacios");
-				rls.keyInPause("Presione cualquier tecla para continuar...", {
-					guide: false,
-				});
-				continue;
-			} */
-			else if (/^0+/.test((input))) {	
-				console.error("Error: El ID no puede ser 0 o comenzar con 0");
-				rls.keyInPause("Presione cualquier tecla para continuar...", {
-					guide: false,
-				});
-				continue;
 			}else if (!/^\d+$/.test(input)) {			// Valida que el ID sea un número entero positivo
-					console.error("Error: Solamente se permiten números enteros.");
+					console.error("Error: Solamente se permiten números enteros mayores a 0.");
 					rls.keyInPause("Presione cualquier tecla para continuar...", {
 						guide: false,
 					});
