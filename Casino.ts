@@ -144,6 +144,7 @@ export class Casino {
                 "Presione cualquier tecla para continuar...",
                 { guide: false, cancel: false }
             );
+			this.agregarUsuario(); //Vuelve a solicitar el nombre
         }
     }
     

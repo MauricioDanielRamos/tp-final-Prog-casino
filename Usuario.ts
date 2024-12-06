@@ -18,12 +18,9 @@ export class Usuario {
     // Establece el nombre del usuario
     public setNombre(nombre: string): void{
         // Valida el nombre ingresado por el usuario
-        if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$/.test(nombre)) {
-			throw new Error("El nombre solamente puede contener caracteres a-z, letras con acento, ñ y espacios.");
-		}
-		if (!nombre || nombre.length < 3) {
-			throw new Error("El nombre debe contener al menos 3 caracteres.");
-		}
+        if (!/^(?:[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,}\s?){1,6}(?<!\s)$/g.test(nombre)) {
+			throw new Error("El nombre debe contener como mínimo 3 carácteres\n\tEstos pueden ser de a-z, letras acentuadas, ñ y espacios intermedios.");
+		} 
 		
         this.nombre = nombre;
     }
