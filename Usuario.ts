@@ -43,6 +43,6 @@ export class Usuario {
 				"No hay suficientes creditos para realizar esta operacion."
 			);
 		}
-        this.creditos=this.getCreditos()+creditos;
+        this.creditos+=creditos;
     }
 }

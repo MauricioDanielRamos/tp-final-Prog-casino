@@ -49,7 +49,7 @@ export class RuedaDeLaFortuna extends Juego {
 	// Función principal para iniciar el juego
 	public jugar(usuario: Usuario): void {
 		let salir = false;
-		while (!salir){
+		while (!salir) {
 			console.clear();
 			this.mostrarInstrucciones([
 				{ clave: "$<NOMBRE_USUARIO>", valor: usuario.getNombre() },
@@ -67,7 +67,7 @@ export class RuedaDeLaFortuna extends Juego {
 				rls.keyInPause("Presione una tecla para continuar", {
 					guide: false,
 				});
-				salir=true;
+				salir = true;
 			}
 
 			// Verifica si el usuario tiene suficientos creditos para jugar
@@ -84,7 +84,7 @@ export class RuedaDeLaFortuna extends Juego {
 					guide: false,
 				});
 				// Termina la ejecución de la función si los creditos sin insuficientes
-				salir=true;
+				salir = true;
 			}
 
 			// Muestra los premios posibles
@@ -94,18 +94,18 @@ export class RuedaDeLaFortuna extends Juego {
 			);
 
 			// Llama a la función para realizar la tirada de la ruleta
-			if (!salir){
+			if (!salir) {
 				const opciones = ["Si", "No"];
 				// Pregunta al usuario si desea hacer la tirada
-				const eleccion: number = rls.keyInSelect(opciones, "¿Desea girar la rueda? ", {
+				const eleccion: number = rls.keyInSelect(opciones, "¿Presione [1] para girar la rueda [2] para salir? ", {
 					guide: false,
 					cancel: false,
 				});
 				switch (eleccion) {
 					case 0: this.realizarTirada(usuario);
-							break;
-					case 1: salir=true;
-							break;
+						break;
+					case 1: salir = true;
+						break;
 				}
 			}
 		}

@@ -13,7 +13,7 @@ export class Sesion {
 
 	// Busca el usuario con el ID proporcionado
 	public getUsuario(id: number): Usuario{
-		const usuario = this.usuarios.find((u) => u.getId() === id);
+		const usuario = this.usuarios.find((u) => u.getId() == id);
 
 		// Verificar si el usuario existe
 		if (!usuario) {
@@ -37,17 +37,17 @@ export class Sesion {
 	}
 
 	// Agrega un usuario nuevo con ID único y creditos iniciales
-	public agregarUsuario(nombre: string): number {
+	public agregarUsuario(nombre: string): Usuario {
 		const usuario = new Usuario(this.idContador, nombre, 0)
 		const ultimo = this.usuarios.push(usuario)-1; // Agrega un nuevo Usuario
 		this.idContador++;
-		return this.usuarios[ultimo].getId();
+		return this.usuarios[ultimo];
 	}
 
 	// Elimina un usuario utilizando el ID
 	public eliminarUsuarioPorId(id: number): void {
-		const index = this.usuarios.findIndex((usuario) => usuario.getId() === id);
-		if (index === -1) {
+		const index = this.usuarios.findIndex((usuario) => usuario.getId() == id);
+		if (index == -1) {
 			throw new Error(`No se encontro ningun usuario con el ID ${id}.`);
 		}
 		this.usuarios.splice(index, 1); // Elimina al usuario del array
@@ -62,7 +62,7 @@ export class Sesion {
 
 	// Establece o ajusta los créditos de un usuario
 	public setCreditosUsuario(id: number, monto: number): void {
-		const usuario = this.usuarios.find((u) => u.getId() === id);
+		const usuario = this.usuarios.find((u) => u.getId() == id);
 		if (!usuario) {
 			throw new Error(`No se encontro un usuario con el ID ${id}.`);
 		}

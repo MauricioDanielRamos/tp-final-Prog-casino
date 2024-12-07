@@ -2,7 +2,7 @@ import { Usuario } from "./Usuario";
 import { IJuego } from "./IJuego";
 import { ParValorClave, Util } from "./Util";
 
-export abstract class Juego implements IJuego{
+export abstract class Juego implements IJuego {
 	//nombre del juego
 	private nombre: string;
 
@@ -19,7 +19,7 @@ export abstract class Juego implements IJuego{
 
 	// Lee las instrucciones desde un archivo con el mismo nombre de la clase
 	// pero extension .ins "Ej: Juego.ins"
-	protected  mostrarInstrucciones(reemplazos?:ParValorClave[]) : void{
+	protected mostrarInstrucciones(reemplazos?: ParValorClave[]): void {
 		console.log(Util.leerArchivo(`./assets/${this.constructor.name}.ins`, reemplazos));
 	}
 

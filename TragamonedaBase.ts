@@ -9,7 +9,7 @@ export abstract class TragamonedaBase extends Juego {
     protected apuesta: number = 0;
     protected emojiFavorito: string = ``;
     protected creditosMinimos: number;
-    
+
     constructor(nombre: string, creditosMinimos: number) {
         super(nombre);
         this.creditosMinimos = creditosMinimos;
@@ -24,9 +24,9 @@ export abstract class TragamonedaBase extends Juego {
             throw new Error(`Error: Creditos insuficientes.`);
         }
 
-        this.mostrarInstrucciones([{clave: '$<NOMBRE_USUARIO>', valor: usuario.getNombre()},
-            {clave: '$<CREDITOS>', valor: Util.convertirAPesosAR(usuario.getCreditos())},
-            {clave: '$<NOMBRE_JUEGO>', valor: this.getNombre()}
+        this.mostrarInstrucciones([{ clave: '$<NOMBRE_USUARIO>', valor: usuario.getNombre() },
+        { clave: '$<CREDITOS>', valor: Util.convertirAPesosAR(usuario.getCreditos()) },
+        { clave: '$<NOMBRE_JUEGO>', valor: this.getNombre() }
         ]);
 
         while (true) {
