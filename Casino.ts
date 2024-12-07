@@ -200,8 +200,6 @@ export class Casino {
 				"Ingrese el ID del usuario al que desea retirar créditos: "
 			);
 
-
-
 			// Busca al usuario con el ID proporcionado
 			const usuario = this.sesion.getUsuario(idUsuario);
 

@@ -35,19 +35,12 @@ export class Util {
 			const input = rls.question(mensaje);
 			if (input == "") {
 				console.error("Error: El ID no puede estar vacío");
-				rls.keyInPause("Presione cualquier tecla para continuar...", {
-					guide: false,
-				});
 				continue;
-			} else if (!/^\d+$/.test(input)) {			// Valida que el ID sea un número entero positivo
+			// Valida que el ID sea un número entero positivo
+			} else if (!/^\d+$/.test(input)) {			
 				console.error("Error: Solamente se permiten números enteros mayores a 0.");
-				rls.keyInPause("Presione cualquier tecla para continuar...", {
-					guide: false,
-				});
 				continue; // Repite el ciclo hasta que se proporcione un ID válido
-
 			}
-
 			// Convierte el ID ingresado a número entero
 			return parseInt(input);
 		}
@@ -58,33 +51,19 @@ export class Util {
 		let monto: number;
 		while (true) {
 			// Solicita el monto que desea cargar
-			const input = rls.question(mensaje).trim();
+			let input = rls.question(mensaje).trim();
 
 			if (input == "") {
 				console.error("Error: El monto no puede estar vacío");
-				rls.keyInPause("Presione cualquier tecla para continuar...", {
-					guide: false,
-				});
 				continue;
-			} else if (isNaN(Number(input))) {
-				// Valida que el monto sea un número válido
-				console.error(
-					"Error: El monto solamente debe contener números"
-				);
-				rls.keyInPause("Presione cualquier tecla para continuar...", {
-					guide: false,
-				});
+			} else if (!/^\d+(?:[\.,]\d{1,2})?$/.test(input)) {
+				console.error("Error: Monto inválido. (Pueden ingresarse números positivos enteros o decimales con 2 dígitos de precisión.")
 				continue;
-			}
-			// Valida que el monto sea mayor a 0
-			else if (parseFloat(input) <= 0) {
-				console.error("Error: El monto debe ser mayor a 0");
-				rls.keyInPause("Presione cualquier tecla para continuar...", {
-					guide: false,
-				});
-				continue; // Repite el ciclo si el monto no es positivo
-			}
-			// Convierte el monto ingresado a número flotante
+			} 
+			
+			//Si el usuario ingreso con "," la reemplazo por "." para que funcione el parseFloat
+			input=input.replace(',','.'); 
+			// Convierte el monto ingresado a número flotante y lo retorna
 			return (monto = parseFloat(input));
 		}
 	}
