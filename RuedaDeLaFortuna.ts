@@ -83,7 +83,7 @@ export class RuedaDeLaFortuna extends Juego {
 				rls.keyInPause("Presione una tecla para continuar", {
 					guide: false,
 				});
-				// Termina la ejecución de la función si los creditos sin insuficientes
+				// Termina la ejecución de la función si los creditos son insuficientes
 				salir = true;
 			}
 

@@ -75,7 +75,7 @@ export class BlackJack extends Juego {
 
             //Muestra las manos en la etapa Inicial
             //this.mostrarMano('Maso: ', this.maso, false); // TEST
-            this.mostrarMano('Maquina:', this.manoMaquina, true);
+            this.mostrarMano('Maquina', this.manoMaquina, true);
             this.mostrarMano(`${usuario.getNombre()} (${this.calcularMano(this.manoUsuario)})`, this.manoUsuario, false);
             switch (rls.keyInSelect(['Pedir', 'Plantarse', 'Rendirse', 'Doblar'], 'Elije: ', { guide: false, cancel: false })) {
                 case 0: //Pedir carta

@@ -33,7 +33,7 @@ export abstract class TragamonedaBase extends Juego {
             console.log(` Estas listo para comenzar el juego?`);
             const comenzar = rls.question(`Escribe 's' para iniciar o 'n' para terminar: `).toLowerCase();
 
-            if (comenzar === `s`) {
+            if (comenzar == `s`) {
                 this.establecerApuesta(usuario);
                 this.elegirEmoji();
                 this.IniciarJuego(usuario);
@@ -45,7 +45,7 @@ export abstract class TragamonedaBase extends Juego {
                     });
                     break;
                 }
-            } else if (comenzar === `n`) {
+            } else if (comenzar == `n`) {
                 console.log(`¡Gracias por jugar!`);
                 rls.keyInPause(`Presione cualquier tecla para continuar...`, {
                     guide: false,

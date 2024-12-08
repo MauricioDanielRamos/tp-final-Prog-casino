@@ -8,8 +8,7 @@ import * as rls from "readline-sync";
 export class Casino {
 	private nombre: string; // nombre del casino
 	private juegos: Juego[]; // Lista de juegos disponibles en el casino
-	private sesion: Sesion;
-	//private sesion: Sesion; // Objeto para gestionar sesiones de usuario
+	private sesion: Sesion; // Objeto para gestionar sesiones de usuario
 
 	// Constructor de la clase SesionCasino
 	constructor(nombre: string, juegos: Juego[]) {
@@ -18,7 +17,7 @@ export class Casino {
 			throw new Error("Nombre no valido.");
 		}
 		this.nombre = nombre;
-		this.juegos = juegos;        //Falta validar acá
+		this.juegos = juegos;
 		this.sesion = new Sesion();
 	}
 
@@ -148,7 +147,7 @@ export class Casino {
 		}
 	}
 
-	// Función para solicitar el monto de credito o retiro
+	// Función para solicitar el monto de credito a cargar o retirar
 	private menuSolicitarMonto(): void {
 		console.clear();
 		console.log("╔═════════════════════════════════════════════╗");
@@ -331,10 +330,10 @@ export class Casino {
 	// Método para obtener el ID del usuario desde la sesión
 	// Este método se adapta en función del número de usuarios disponibles
 	private obtenerUsuario(): Usuario {
-		// Si hay más de un usuariom, muestra los usuarios disponibles
+		// Si hay más de un usuario, muestra los usuarios disponibles
 		console.log("Usuarios disponibles:");
 		this.sesion.imprimirListadoUsuarios();
-		// Solicita el ID a el usuario
+		// Solicita el ID del usuario
 		const idUsuario = Util.solicitarID("Ingrese el ID del usuario: ");
 		return this.sesion.getUsuario(idUsuario);
 	}
