@@ -42,6 +42,7 @@ export class Sesion {
 		const ultimo = this.usuarios.push(usuario)-1; // Agrega un nuevo Usuario
 		this.idContador++;
 		return this.usuarios[ultimo];
+		
 	}
 
 	// Elimina un usuario utilizando el ID
@@ -51,6 +52,10 @@ export class Sesion {
 			throw new Error(`No se encontro ningun usuario con el ID ${id}.`);
 		}
 		this.usuarios.splice(index, 1); // Elimina al usuario del array
+		// Si no hay más usuarios, reinicia el contador de IDs
+		if (this.usuarios.length === 0) {
+			this.idContador = 1;
+		}
 	}
 
 	// Retorna la cantidad de créditos cargados en la sesión

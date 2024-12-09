@@ -154,7 +154,7 @@ export class Casino {
 		console.log("║       Cargar o Retirar Monto de Dinero      ║");
 		console.log("╚═════════════════════════════════════════════╝");
 
-		if (this.sesion.getCantUsuarios() === 0) {
+		if (this.sesion.getCantUsuarios() == 0) {
 			// Verifica si hay usuarios registrados
 			console.error(
 				// Muestra mensaje si no hay usuarios registrados
@@ -378,6 +378,7 @@ export class Casino {
 				rls.keyInPause("Presione cualquier tecla para continuar...", {
 					guide: false,
 				});
+				break;
 			}
 		}
 	}

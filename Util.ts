@@ -56,7 +56,8 @@ export class Util {
 			if (input == "") {
 				console.error("Error: El monto no puede estar vacío");
 				continue;
-			} else if (!/^\d+(?:[\.,]\d{1,2})?$/.test(input)) {
+				
+			} else if (!/^(?!0$)\d+(?:[\.,]\d{1,2})?$/.test(input)) {
 				console.error("Error: Monto inválido. (Pueden ingresarse números positivos enteros o decimales con 2 dígitos de precisión.")
 				continue;
 			} 
