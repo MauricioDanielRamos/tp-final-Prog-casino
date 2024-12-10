@@ -7,7 +7,7 @@ export class TragamonedaAnimal extends TragamonedaBase {
         this.rodillos = [`🦁`, `🐯`, `🐻`, `🐼`, `🐨`, `🐸`, `🐵`, `🦊`, `🐴`, `🐶`];
     }
 
-    protected girarRodillos(): string[] {
+    public girarRodillos(): string[] {
         const resultados: string[] = [];
         for (let i = 0; i < 4; i++) {
             const indiceAleatorio = Math.floor(Math.random() * this.rodillos.length);
@@ -16,7 +16,7 @@ export class TragamonedaAnimal extends TragamonedaBase {
         return resultados;
     }
 
-    protected mostrarPremio(coincidencias: number, usuario: Usuario): void {
+    public mostrarPremio(coincidencias: number, usuario: Usuario): void {
         let premio = 0;
         switch (coincidencias) {
             case 4:

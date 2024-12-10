@@ -8,7 +8,7 @@ export class TragamonedaFrutal extends TragamonedaBase {
         this.rodillos = [`🍒`, `🍋`, `🍊`, `🍉`, `🍇`, `🍓`, `🍍`, `🥝`, `🍌`, `🥥`];
     }
 
-    protected mostrarPremio(coincidencias: number, usuario: Usuario): void {
+    public mostrarPremio(coincidencias: number, usuario: Usuario): void {
         let premio = 0;
         switch (coincidencias) {
             case 3:
